@@ -1,14 +1,14 @@
 import React from "react";
 import { View, StyleSheet, Image } from "react-native";
 
-import colors from "../config/colors";
 import AppText from "./AppText";
+import colors from "../config/colors";
 
 function Card({ title, subTitle, image }) {
   return (
     <View style={styles.card}>
       <Image style={styles.image} source={image} />
-      <View style={styles.detailContainer}>
+      <View style={styles.detailsContainer}>
         <AppText style={styles.title}>{title}</AppText>
         <AppText style={styles.subTitle}>{subTitle}</AppText>
       </View>
@@ -23,19 +23,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     overflow: "hidden",
   },
+  detailsContainer: {
+    padding: 20,
+  },
   image: {
     width: "100%",
     height: 200,
   },
-  detailContainer: {
-    padding: 20,
+  subTitle: {
+    color: colors.secondary,
+    fontWeight: "bold",
   },
   title: {
     marginBottom: 7,
-  },
-  subTitle: {
-    color: colors.primary,
-    fontWeight: "bold",
   },
 });
 
