@@ -24,10 +24,14 @@ function ImageInput({ imageUri, onChangeImage }) {
   const selectImage = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
+        base64: true,
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
-      if (!result.cancelled) onChangeImage(result.uri);
+      if (!result.cancelled) {
+        let uri = `data:image/jpg;base64,${result.base64}`;
+        onChangeImage(uri);
+      }
     } catch (error) {
       console.log("Error reading an image", error);
     }

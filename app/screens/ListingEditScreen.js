@@ -1,6 +1,7 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { KeyboardAvoidingView, ScrollView, StyleSheet } from "react-native";
 import * as Yup from "yup";
+import { connect } from "react-redux";
 
 import {
   AppForm as Form,
@@ -12,6 +13,11 @@ import {
 import Screen from "../components/Screen";
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import useLocation from "../hooks/useLocation";
+import useApi from "../hooks/useApi";
+import { getCategories } from "../api/category";
+import { addProducts } from "../api/product";
+import UploadScreen from "./UploadScreen";
+import * as productActions from "../redux/actions/product";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
@@ -27,48 +33,87 @@ const categories = [
   { label: "Camera", value: 3, backgroundColor: "blue", icon: "lock" },
 ];
 
-function ListingEditScreen() {
-  const location = useLocation();
+function ListingEditScreen(props) {
+  const [progress, setProgress] = useState(0);
+  const [uploadVisible, setUploadVisible] = useState(false);
+  // const location = useLocation();
+  const getCategoriesApi = useApi(getCategories);
+
+  useEffect(() => {
+    getCategoriesApi.request();
+  }, []);
+
+  const handleSubmit = async (values, { resetForm }) => {
+    let dataPost = {
+      images: [...values.images],
+      name: values.title,
+      price: values.price,
+      category: values.category.id,
+      description: values.description,
+      countInStock: 10,
+    };
+
+    setProgress(0);
+    setUploadVisible(true);
+
+    const res = await addProducts(dataPost, (progress) =>
+      setProgress(progress)
+    );
+
+    setUploadVisible(false);
+
+    if (!res.ok) {
+      alert("Some thing went wrong! Could not Post Product!");
+    } else alert("Success");
+
+    resetForm();
+    await props.fetchProducts();
+  };
 
   return (
     <Screen style={styles.container}>
-      <Form
-        initialValues={{
-          title: "",
-          price: "",
-          description: "",
-          category: null,
-          images: [],
-        }}
-        onSubmit={(values) => console.log(location)}
-        validationSchema={validationSchema}
-      >
-        <FormImagePicker name="images" />
-        <FormField maxLength={255} name="title" placeholder="Title" />
-        <FormField
-          keyboardType="numeric"
-          maxLength={8}
-          name="price"
-          placeholder="Price"
-          width={120}
-        />
-        <Picker
-          width="50%"
-          items={categories}
-          name="category"
-          placeholder="Category"
-          PickerItemComponent={CategoryPickerItem}
-          numberOfColumn={3}
-        />
-        <FormField
-          maxLength={255}
-          multiline
-          name="description"
-          numberOfLines={3}
-          placeholder="Description"
-        />
-        <SubmitButton title="Post" />
-      </Form>
+      <UploadScreen progress={progress} visible={uploadVisible} />
+      <KeyboardAvoidingView>
+        <ScrollView>
+          <Form
+            initialValues={{
+              title: "",
+              price: "",
+              description: "",
+              category: null,
+              images: [],
+            }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <FormImagePicker name="images" />
+            <FormField maxLength={255} name="title" placeholder="Title" />
+            <FormField
+              keyboardType="numeric"
+              maxLength={8}
+              name="price"
+              placeholder="Price"
+              width={120}
+            />
+            <Picker
+              width="50%"
+              items={getCategoriesApi.data}
+              name="category"
+              placeholder="Category"
+              PickerItemComponent={CategoryPickerItem}
+              numberOfColumn={3}
+            />
+            <FormField
+              maxLength={255}
+              multiline
+              name="description"
+              numberOfLines={3}
+              placeholder="Description"
+            />
+            <SubmitButton title="Post" />
+          </Form>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Screen>
   );
 }
@@ -78,4 +123,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-export default ListingEditScreen;
+export default connect(null, (dispatch) => ({
+  fetchProducts: async () => dispatch(productActions.fetchProducts()),
+}))(ListingEditScreen);

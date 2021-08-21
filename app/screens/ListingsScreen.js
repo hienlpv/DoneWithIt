@@ -1,36 +1,43 @@
-import React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, ActivityIndicator } from "react-native";
+import { connect } from "react-redux";
 
 import Screen from "../components/Screen";
 import Card from "../components/Card";
 import colors from "../config/colors";
-
-const listings = [
-  {
-    id: 1,
-    title: "Red jacket for sale",
-    price: 100,
-    image: require("../assets/jacket.jpg"),
-  },
-  {
-    id: 2,
-    title: "Couch in great condition",
-    price: 1000,
-    image: require("../assets/couch.jpg"),
-  },
-];
-
+import useApi from "../hooks/useApi";
+import { getProducts } from "../api/product";
+import * as productAction from "../redux/actions/product";
 function ListingsScreen(props) {
+  const { navigation, products, fetchProducts } = props;
+  const [loading, setLoading] = useState(false);
+
+  const getProducts = async () => {
+    setLoading(true);
+    await fetchProducts();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   return (
     <Screen style={styles.screen}>
+      <ActivityIndicator
+        animating={loading}
+        size="large"
+        color={colors.primary}
+      />
       <FlatList
-        data={listings}
-        keyExtractor={(listing) => listing.id.toString()}
+        data={products}
+        keyExtractor={(data) => data.id.toString()}
         renderItem={({ item }) => (
           <Card
-            title={item.title}
+            title={item.name}
             subTitle={"$" + item.price}
-            image={item.image}
+            imageURL={item.images[0]}
+            onPress={() => navigation.navigate("ListingDetails", item)}
           />
         )}
       />
@@ -40,9 +47,15 @@ function ListingsScreen(props) {
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 20,
+    padding: 10,
     backgroundColor: colors.light,
+    justifyContent: "center",
   },
 });
 
-export default ListingsScreen;
+const mapStateToProps = (state) => ({ products: state.products });
+const mapDispatchToProps = (dispatch) => ({
+  fetchProducts: async () => dispatch(productAction.fetchProducts()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListingsScreen);

@@ -13,6 +13,7 @@ const menuItems = [
       name: "format-list-bulleted",
       backgroundColor: colors.primary,
     },
+    targetScreen: "Feed",
   },
   {
     title: "My Messages",
@@ -20,17 +21,18 @@ const menuItems = [
       name: "email",
       backgroundColor: colors.secondary,
     },
+    targetScreen: "Messages",
   },
 ];
 
-function AccountScreen(props) {
+function AccountScreen({ navigation }) {
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
           title="Mosh Hamedani"
           subTitle="programmingwithmosh@gmail.com"
-          image={require("../assets/mosh.jpg")}
+          image="../assets/mosh.jpg"
         />
       </View>
       <View style={styles.container}>
@@ -47,6 +49,7 @@ function AccountScreen(props) {
                   backgroundColor={item.icon.backgroundColor}
                 />
               }
+              onPress={() => navigation.navigate(item.targetScreen)}
             />
           )}
         />
