@@ -13,12 +13,12 @@ import * as cartAction from "../redux/actions/cartItem";
 import Text from "../components/Text";
 
 function CartScreen(props) {
-  const { cartItems } = props;
+  const { cartItems, navigation } = props;
 
   if (cartItems.length === 0)
     return (
       <Screen>
-        <Text>Your Cart is Empty</Text>
+        <Text style={{ textAlign: "center" }}>Your Cart is Empty</Text>
       </Screen>
     );
 
@@ -57,7 +57,11 @@ function CartScreen(props) {
           <Text>Count: {cartItems.length}</Text>
           <Text>Total: {Total()}</Text>
         </View>
-        <Button style={styles.checkoutButton} title="Checkout" />
+        <Button
+          style={styles.checkoutButton}
+          title="Checkout"
+          onPress={() => navigation.navigate("Checkout")}
+        />
       </View>
     </Screen>
   );

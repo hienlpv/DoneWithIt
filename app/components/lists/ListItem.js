@@ -30,11 +30,13 @@ function ListItem({
               </AppText>
             )}
           </View>
-          <MaterialCommunityIcons
-            name="chevron-right"
-            size={25}
-            color={colors.medium}
-          />
+          {renderRightActions ? (
+            <MaterialCommunityIcons
+              name="chevron-right"
+              size={25}
+              color={colors.medium}
+            />
+          ) : null}
         </View>
       </TouchableHighlight>
     </Swipeable>

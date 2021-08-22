@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 
 import Screen from "../components/Screen";
 import { ListItem, ListItemSeparator } from "../components/lists";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
+import AuthContext from "../auth/context";
+import authStorage from "../auth/storage";
+import { getUserInfo } from "../api/auth";
 
-const menuItems = [
+const menuAdminItems = [
   {
-    title: "My Listings",
+    title: "Categories",
+    icon: {
+      name: "format-list-bulleted",
+      backgroundColor: colors.danger,
+    },
+    targetScreen: "Feed",
+  },
+  {
+    title: "Order List",
+    icon: {
+      name: "format-list-bulleted",
+      backgroundColor: colors.medium,
+    },
+    targetScreen: "Orders",
+  },
+  {
+    title: "Product List",
     icon: {
       name: "format-list-bulleted",
       backgroundColor: colors.primary,
@@ -16,28 +35,52 @@ const menuItems = [
     targetScreen: "Feed",
   },
   {
-    title: "My Messages",
+    title: "Add Product",
     icon: {
-      name: "email",
+      name: "plus",
       backgroundColor: colors.secondary,
     },
-    targetScreen: "Messages",
+    targetScreen: "ListingEdit",
+  },
+];
+
+const menuUserItems = [
+  {
+    title: "My Orders",
+    icon: {
+      name: "format-list-bulleted",
+      backgroundColor: colors.primary,
+    },
+    targetScreen: "Orders",
   },
 ];
 
 function AccountScreen({ navigation }) {
+  const { user, setUser } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    setUser(null);
+    authStorage.removeToken();
+  };
+
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
-          title="Mosh Hamedani"
-          subTitle="programmingwithmosh@gmail.com"
-          image="../assets/mosh.jpg"
+          title={user.name}
+          subTitle={user.email}
+          IconComponent={
+            user.isAdmin ? (
+              <Icon name="account-cog" size={80} />
+            ) : (
+              <Icon name="account" size={80} />
+            )
+          }
         />
       </View>
       <View style={styles.container}>
         <FlatList
-          data={menuItems}
+          data={user.isAdmin ? menuAdminItems : menuUserItems}
           keyExtractor={(menuItem) => menuItem.title}
           ItemSeparatorComponent={ListItemSeparator}
           renderItem={({ item }) => (
@@ -49,7 +92,11 @@ function AccountScreen({ navigation }) {
                   backgroundColor={item.icon.backgroundColor}
                 />
               }
-              onPress={() => navigation.navigate(item.targetScreen)}
+              onPress={() =>
+                navigation.navigate(item.targetScreen, {
+                  user,
+                })
+              }
             />
           )}
         />
@@ -57,6 +104,7 @@ function AccountScreen({ navigation }) {
       <ListItem
         title="Log Out"
         IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+        onPress={handleLogout}
       />
     </Screen>
   );

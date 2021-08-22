@@ -41,8 +41,8 @@ const AppNavigator = (props) => {
         name="Feed"
         component={FeedNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="home" color={color} size={30} />
           ),
         }}
       />
@@ -50,24 +50,11 @@ const AppNavigator = (props) => {
         name="Cart"
         component={CartNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ color }) => (
             <View>
-              <MaterialCommunityIcons name="cart" color={color} size={size} />
+              <MaterialCommunityIcons name="cart" color={color} size={30} />
               <CartIcon length={props.cartItems.length} />
             </View>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="ListingEdit"
-        component={ListingEditScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="plus-circle"
-              color={color}
-              size={size}
-            />
           ),
         }}
       />
@@ -76,8 +63,8 @@ const AppNavigator = (props) => {
         name="Account"
         component={AccountNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account" color={color} size={30} />
           ),
         }}
       />

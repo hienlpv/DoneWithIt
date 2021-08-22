@@ -4,10 +4,10 @@ import * as Yup from "yup";
 import { connect } from "react-redux";
 
 import {
-  AppForm as Form,
-  AppFormField as FormField,
-  AppFormPicker as Picker,
+  Form,
+  FormField,
   FormImagePicker,
+  FormPicker,
   SubmitButton,
 } from "../components/forms";
 import Screen from "../components/Screen";
@@ -95,7 +95,7 @@ function ListingEditScreen(props) {
               placeholder="Price"
               width={120}
             />
-            <Picker
+            <FormPicker
               width="50%"
               items={getCategoriesApi.data}
               name="category"

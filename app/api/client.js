@@ -1,14 +1,16 @@
 import { create } from "apisauce";
 import cache from "../utility/cache";
-
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTFiYTY5NTM4MDlkNDAwMjM1NGQwZGYiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2Mjk1NDA2NDYsImV4cCI6MTYyOTYyNzA0Nn0.lDZqDe0VWI2x_bWiUDIcu7q-wRUmuhbnBRzebAhf3Ms";
+import authStorage from "../auth/storage";
 
 const apiClient = create({
   baseURL: "https://easy-shop-server-api.herokuapp.com/api/v1",
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
+});
+
+apiClient.addAsyncRequestTransform(async (request) => {
+  const token = await authStorage.getToken();
+  if (!token) return;
+  const authToken = `Bearer ${token}`;
+  request.headers["Authorization"] = authToken;
 });
 
 const get = apiClient.get;
