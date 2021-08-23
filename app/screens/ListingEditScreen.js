@@ -12,7 +12,7 @@ import {
 } from "../components/forms";
 import Screen from "../components/Screen";
 import CategoryPickerItem from "../components/CategoryPickerItem";
-import useLocation from "../hooks/useLocation";
+// import useLocation from "../hooks/useLocation";
 import useApi from "../hooks/useApi";
 import { getCategories } from "../api/category";
 import { addProducts } from "../api/product";
@@ -21,17 +21,11 @@ import * as productActions from "../redux/actions/product";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
-  price: Yup.number().required().min(1).max(10000).label("Price"),
+  price: Yup.string().required().min(1).label("Price"),
   description: Yup.string().label("Description"),
   category: Yup.object().required().nullable().label("Category"),
   images: Yup.array().min(1, "Please select at least one image"),
 });
-
-const categories = [
-  { label: "Furniture", value: 1, backgroundColor: "red", icon: "apps" },
-  { label: "Clothing", value: 2, backgroundColor: "green", icon: "email" },
-  { label: "Camera", value: 3, backgroundColor: "blue", icon: "lock" },
-];
 
 function ListingEditScreen(props) {
   const [progress, setProgress] = useState(0);
@@ -44,6 +38,7 @@ function ListingEditScreen(props) {
   }, []);
 
   const handleSubmit = async (values, { resetForm }) => {
+    values.price = values.price.replace(/\./g, "").replace(" VND", "");
     let dataPost = {
       images: [...values.images],
       name: values.title,
@@ -52,7 +47,6 @@ function ListingEditScreen(props) {
       description: values.description,
       countInStock: 10,
     };
-
     setProgress(0);
     setUploadVisible(true);
 
@@ -64,6 +58,7 @@ function ListingEditScreen(props) {
 
     if (!res.ok) {
       alert("Some thing went wrong! Could not Post Product!");
+      console.log(res.data);
     } else alert("Success");
 
     resetForm();
@@ -90,10 +85,9 @@ function ListingEditScreen(props) {
             <FormField maxLength={255} name="title" placeholder="Title" />
             <FormField
               keyboardType="numeric"
-              maxLength={8}
               name="price"
               placeholder="Price"
-              width={120}
+              width="80%"
             />
             <FormPicker
               width="50%"

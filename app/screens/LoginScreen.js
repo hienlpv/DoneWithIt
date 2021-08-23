@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   error: {
-    width: "100%",
     textAlign: "center",
   },
 });

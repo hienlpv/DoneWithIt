@@ -10,17 +10,21 @@ function Icon({
   backgroundColor = `${colors.medium}`,
   iconColor = "#fff",
   number,
+  style,
 }) {
   return (
     <View
-      style={{
-        width: size,
-        height: size,
-        borderRadius: size / 2,
-        backgroundColor,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      style={[
+        {
+          width: size,
+          height: size,
+          borderRadius: size / 2,
+          backgroundColor,
+          justifyContent: "center",
+          alignItems: "center",
+        },
+        style,
+      ]}
     >
       {number ? <Text style={{ color: "#fff" }}>{number}</Text> : null}
       {name && (

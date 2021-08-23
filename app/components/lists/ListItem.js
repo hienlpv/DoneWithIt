@@ -7,6 +7,7 @@ import AppText from "../Text";
 import colors from "../../config/colors";
 
 function ListItem({
+  titleColor,
   title,
   subTitle,
   image,
@@ -21,7 +22,13 @@ function ListItem({
           {IconComponent}
           {image && <Image style={styles.image} source={{ uri: image }} />}
           <View style={styles.detailsContainer}>
-            <AppText style={styles.title} numberOfLines={1}>
+            <AppText
+              style={[
+                styles.title,
+                { color: titleColor ? titleColor : colors.black },
+              ]}
+              numberOfLines={1}
+            >
               {title}
             </AppText>
             {subTitle && (

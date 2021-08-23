@@ -1,5 +1,5 @@
-import React from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import React, { useContext } from "react";
+import { FlatList, View, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 
 import Screen from "../components/Screen";
@@ -9,11 +9,16 @@ import {
   ListItemSeparator,
 } from "../components/lists";
 import Button from "../components/Button";
+import Icon from "../components/Icon";
 import * as cartAction from "../redux/actions/cartItem";
 import Text from "../components/Text";
+import AuthContext from "../auth/context";
+import colors from "../config/colors";
+import { formatVND } from "../utility/formatCurrency";
 
 function CartScreen(props) {
   const { cartItems, navigation } = props;
+  const { user } = useContext(AuthContext);
 
   if (cartItems.length === 0)
     return (
@@ -40,7 +45,7 @@ function CartScreen(props) {
         renderItem={({ item }) => (
           <ListItem
             title={item.name}
-            subTitle={`$${item.price} x ${item.count}`}
+            subTitle={`${formatVND(item.price)} x ${item.count}`}
             image={item.images[0]}
             onPress={() => console.log("Message selected", item)}
             renderRightActions={() => (
@@ -53,15 +58,34 @@ function CartScreen(props) {
         ItemSeparatorComponent={ListItemSeparator}
       />
       <View style={styles.checkoutContainer}>
-        <View>
-          <Text>Count: {cartItems.length}</Text>
-          <Text>Total: {Total()}</Text>
+        <View style={styles.checkoutDetail}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text style={styles.left}>Count:</Text>
+            <Text style={styles.right}>{cartItems.length}</Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text style={styles.left}>Total:</Text>
+            <Text style={styles.right}>{formatVND(Total())}</Text>
+          </View>
         </View>
-        <Button
-          style={styles.checkoutButton}
-          title="Checkout"
-          onPress={() => navigation.navigate("Checkout")}
-        />
+        {user ? (
+          <TouchableOpacity
+            style={styles.checkoutButton}
+            onPress={() => navigation.navigate("Checkout")}
+          >
+            <Icon
+              name="credit-card-check"
+              backgroundColor={colors.primary}
+              size={50}
+            />
+          </TouchableOpacity>
+        ) : (
+          <Button
+            style={styles.checkoutButton}
+            title="Login"
+            onPress={() => navigation.navigate("Welcome")}
+          />
+        )}
       </View>
     </Screen>
   );
@@ -72,9 +96,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
+    padding: 10,
+    backgroundColor: colors.white,
   },
   checkoutButton: {
-    width: "60%",
+    flex: 1,
+    alignItems: "center",
+  },
+  checkoutDetail: {
+    flex: 2,
+  },
+  left: {
+    flex: 1,
+    fontSize: 14,
+    color: colors.medium,
+  },
+  right: {
+    flex: 2,
+    color: colors.secondary,
   },
 });
 

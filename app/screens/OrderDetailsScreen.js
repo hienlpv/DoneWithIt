@@ -5,16 +5,27 @@ import { ListItem, ListItemSeparator } from "../components/lists";
 import Screen from "../components/Screen";
 import AppText from "../components/Text";
 import colors from "../config/colors";
+import { formatVND } from "../utility/formatCurrency";
 
 function OrderDetailsScreen({ route }) {
   const order = route.params.item;
 
+  const colorStatus = {
+    Pending: "blue",
+    Shipping: "orange",
+    Done: "green",
+  };
+
   return (
     <Screen>
-      <View style={{ marginBottom: 20 }}>
+      <View style={{ marginBottom: 20, backgroundColor: colors.white }}>
         <View style={styles.container}>
           <AppText style={styles.header}>Status</AppText>
-          <AppText style={styles.content}>{order.status}</AppText>
+          <AppText
+            style={[styles.content, { color: colorStatus[order.status] }]}
+          >
+            {order.status}
+          </AppText>
         </View>
         <View style={styles.container}>
           <AppText style={styles.header}>City</AppText>
@@ -30,7 +41,9 @@ function OrderDetailsScreen({ route }) {
         </View>
         <View style={styles.container}>
           <AppText style={styles.header}>Total</AppText>
-          <AppText style={styles.content}>{order.totalPrice}</AppText>
+          <AppText style={[styles.content, { color: colors.primary }]}>
+            {formatVND(order.totalPrice)}
+          </AppText>
         </View>
         <View style={styles.container}>
           <AppText style={styles.header}>Date Created</AppText>
@@ -45,7 +58,7 @@ function OrderDetailsScreen({ route }) {
         renderItem={({ item }) => (
           <ListItem
             title={item.product.name}
-            subTitle={`$${item.product.price} x ${item.quantity}`}
+            subTitle={`${formatVND(item.product.price)} x ${item.quantity}`}
             image={item.product.images[0]}
           />
         )}
@@ -60,11 +73,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderBottomColor: colors.white,
-    borderBottomWidth: 0.5,
+    borderBottomColor: colors.light,
+    borderBottomWidth: 1,
   },
   header: {
-    fontWeight: "bold",
+    color: colors.medium,
     width: "40%",
   },
   content: {

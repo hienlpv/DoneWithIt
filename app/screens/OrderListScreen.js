@@ -16,6 +16,12 @@ function OrderListScreen(props) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const colorStatus = {
+    Pending: "blue",
+    Shipping: "orange",
+    Done: "green",
+  };
+
   const getOrders = async () => {
     if (!isAdmin) {
       setLoading(true);
@@ -49,6 +55,7 @@ function OrderListScreen(props) {
         keyExtractor={(order) => order.id.toString()}
         renderItem={({ item, index }) => (
           <ListItem
+            titleColor={colorStatus[item.status]}
             title={item.status}
             subTitle={moment(item.dateOrdered).fromNow()}
             IconComponent={

@@ -1,4 +1,4 @@
-import { FETCH_PRODUCT } from "../constants";
+import { FETCH_PRODUCT, FILTER_PRODUCT } from "../constants";
 
 const products = (state = [], action) => {
   switch (action.type) {

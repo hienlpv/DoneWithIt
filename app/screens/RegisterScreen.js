@@ -41,10 +41,14 @@ function RegisterScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView>
-      <ScrollView>
-        <Screen style={styles.container}>
-          <ErrorMessage error={registerFailed} visible={registerFailed} />
+    <Screen style={styles.container}>
+      <KeyboardAvoidingView>
+        <ScrollView>
+          <ErrorMessage
+            error={registerFailed}
+            visible={registerFailed}
+            style={{ textAlign: "center" }}
+          />
           <Form
             initialValues={{ name: "", email: "", password: "", phone: "" }}
             onSubmit={handleSubmit}
@@ -93,9 +97,9 @@ function RegisterScreen({ navigation }) {
             size="large"
             color={colors.primary}
           />
-        </Screen>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </Screen>
   );
 }
 
