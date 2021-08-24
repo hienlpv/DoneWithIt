@@ -9,3 +9,5 @@ export const addProducts = (data, onUploadProgress) =>
     onUploadProgress: (progress) =>
       onUploadProgress(progress.loaded / progress.total),
   });
+
+export const deleteProduct = (id) => client.delete(`${endpoint}/${id}`);

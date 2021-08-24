@@ -11,6 +11,7 @@ function Icon({
   iconColor = "#fff",
   number,
   style,
+  text,
 }) {
   return (
     <View
@@ -20,6 +21,7 @@ function Icon({
           height: size,
           borderRadius: size / 2,
           backgroundColor,
+          flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
         },
@@ -33,6 +35,9 @@ function Icon({
           color={iconColor}
           size={size * 0.5}
         />
+      )}
+      {text && (
+        <Text style={{ color: colors.white, marginLeft: 5 }}>{text}</Text>
       )}
     </View>
   );

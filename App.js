@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import store from "./app/redux/store";
 import AppLoading from "expo-app-loading";
+import Toast from "react-native-toast-message";
 
 import AuthNavigator from "./app/navigation/AuthNavigator";
 import navigationTheme from "./app/navigation/navigationTheme";
@@ -36,8 +37,9 @@ export default function App() {
       <Provider store={store}>
         <OfflineNotice />
         <NavigationContainer theme={navigationTheme}>
-          {user ? <AppNavigator /> : <AuthNavigator />}
+          <AppNavigator />
         </NavigationContainer>
+        <Toast ref={(ref) => Toast.setRef(ref)} />
       </Provider>
     </AuthContext.Provider>
   );

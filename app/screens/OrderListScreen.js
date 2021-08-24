@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import moment from "moment";
 
-import { getUserOrders } from "../api/order";
+import { getUserOrders, fetchOrders } from "../api/order";
 import Icon from "../components/Icon";
 import { ListItem, ListItemSeparator } from "../components/lists";
 import Screen from "../components/Screen";
@@ -23,14 +23,12 @@ function OrderListScreen(props) {
   };
 
   const getOrders = async () => {
-    if (!isAdmin) {
-      setLoading(true);
-      const result = await getUserOrders(id);
-      setLoading(false);
+    setLoading(true);
+    const result = isAdmin ? await fetchOrders() : await getUserOrders(id);
+    setLoading(false);
 
-      if (!result.ok) return console.log(result.data);
-      setOrders(result.data);
-    }
+    if (!result.ok) return console.log(result.data);
+    setOrders(result.data);
   };
 
   useEffect(() => {
@@ -38,15 +36,7 @@ function OrderListScreen(props) {
   }, []);
 
   return (
-    <Screen>
-      {loading && (
-        <ActivityIndicator
-          style={{ height: "100%" }}
-          animating={loading}
-          size="large"
-          color={colors.primary}
-        />
-      )}
+    <Screen style={styles.screen}>
       {orders.length === 0 && !loading && (
         <Text style={{ textAlign: "center" }}>Your Order List is Empty</Text>
       )}
@@ -64,9 +54,13 @@ function OrderListScreen(props) {
                 backgroundColor={colors.primary}
               />
             }
-            onPress={() => navigation.navigate("OrderDetails", { item })}
+            onPress={() =>
+              navigation.navigate("OrderDetails", { item, isAdmin })
+            }
           />
         )}
+        refreshing={loading}
+        onRefresh={() => getOrders()}
         ItemSeparatorComponent={ListItemSeparator}
       />
     </Screen>
@@ -74,7 +68,9 @@ function OrderListScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  screen: {
+    paddingTop: 0,
+  },
 });
 
 export default OrderListScreen;

@@ -1,5 +1,10 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, Image } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  ScrollView,
+  KeyboardAvoidingView,
+} from "react-native";
 import * as Yup from "yup";
 import jwtDecode from "jwt-decode";
 import { ActivityIndicator } from "react-native";
@@ -43,47 +48,54 @@ function LoginScreen(props) {
 
   return (
     <Screen style={styles.container}>
-      <Image style={styles.logo} source={require("../assets/logo-red.png")} />
+      <KeyboardAvoidingView>
+        <ScrollView>
+          <Image
+            style={styles.logo}
+            source={require("../assets/logo-red.png")}
+          />
 
-      <ErrorMessage
-        style={styles.error}
-        error="Invalid email or password"
-        visible={loginFailed}
-      />
-      <Form
-        initialValues={{ email: "", password: "" }}
-        onSubmit={handleSubmit}
-        validationSchema={validationSchema}
-      >
-        <FormField
-          autoCapitalize="none"
-          autoCorrect={false}
-          icon="email"
-          keyboardType="email-address"
-          name="email"
-          placeholder="Email"
-          textContentType="emailAddress"
-        />
-        <FormField
-          autoCapitalize="none"
-          autoCorrect={false}
-          icon="lock"
-          name="password"
-          placeholder="Password"
-          secureTextEntry
-          textContentType="password"
-        />
-        {loading ? (
-          <AppButton title="Login..." />
-        ) : (
-          <SubmitButton title="Login" />
-        )}
-      </Form>
-      <ActivityIndicator
-        animating={loading}
-        size="large"
-        color={colors.primary}
-      />
+          <ErrorMessage
+            style={styles.error}
+            error="Invalid email or password"
+            visible={loginFailed}
+          />
+          <Form
+            initialValues={{ email: "", password: "" }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <FormField
+              autoCapitalize="none"
+              autoCorrect={false}
+              icon="email"
+              keyboardType="email-address"
+              name="email"
+              placeholder="Email"
+              textContentType="emailAddress"
+            />
+            <FormField
+              autoCapitalize="none"
+              autoCorrect={false}
+              icon="lock"
+              name="password"
+              placeholder="Password"
+              secureTextEntry
+              textContentType="password"
+            />
+            {loading ? (
+              <AppButton title="Login..." />
+            ) : (
+              <SubmitButton title="Login" />
+            )}
+          </Form>
+          <ActivityIndicator
+            animating={loading}
+            size="large"
+            color={colors.primary}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Screen>
   );
 }

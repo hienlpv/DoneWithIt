@@ -1,13 +1,14 @@
 import React from "react";
 import { ImageBackground, StyleSheet, View, Image, Text } from "react-native";
 import AppButton from "../components/Button";
+import colors from "../config/colors";
 
 function WelcomeScreen({ navigation }) {
   return (
     <ImageBackground
-      blurRadius={10}
-      style={styles.background}
+      blurRadius={20}
       source={require("../assets/background.jpg")}
+      style={styles.background}
     >
       <View style={styles.logoContainer}>
         <Image style={styles.logo} source={require("../assets/logo-red.png")} />

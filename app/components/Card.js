@@ -20,7 +20,9 @@ function Card({ title, subTitle, imageURL, onPress }) {
         />
         <View style={styles.detailsContainer}>
           <AppText style={styles.title}>{title}</AppText>
-          <AppText style={styles.subTitle}>{subTitle}</AppText>
+          <View style={styles.priceContainer}>
+            <AppText style={styles.subTitle}>{subTitle}</AppText>
+          </View>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -36,6 +38,11 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     padding: 20,
+  },
+  priceContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   image: {
     width: "100%",

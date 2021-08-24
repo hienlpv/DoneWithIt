@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
   FlatList,
   StyleSheet,
-  ActivityIndicator,
   ScrollView,
   View,
-  TouchableWithoutFeedback,
   TouchableOpacity,
 } from "react-native";
 import { connect } from "react-redux";
@@ -23,11 +21,13 @@ import Icon from "../components/Icon";
 
 function ListingsScreen(props) {
   const { navigation, products, fetchProducts } = props;
+
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [active, setActive] = useState(0);
   const [searchActive, setSearchActive] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState(products);
+  const [countInStock, setCountInStock] = useState(products.countInStock);
 
   const getProducts = async () => {
     setLoading(true);
@@ -41,16 +41,16 @@ function ListingsScreen(props) {
 
   const handleActive = (id) => {
     setActive(id);
-    if (id === 0) setFilteredProducts(products);
+    if (id === 0) setFilteredProducts(products.reverse());
     else
       setFilteredProducts(
-        products.filter((product) => product.category._id === id)
+        products.reverse().filter((product) => product.category._id === id)
       );
   };
 
   const search = (text) => {
     setFilteredProducts(
-      products.filter((product) => product.name.includes(text))
+      products.reverse().filter((product) => product.name.includes(text))
     );
   };
 
@@ -63,6 +63,7 @@ function ListingsScreen(props) {
   useEffect(() => {
     getProducts();
   }, []);
+
   if (searchActive)
     return (
       <Screen style={styles.screen}>
@@ -132,15 +133,8 @@ function ListingsScreen(props) {
           ))}
         </ScrollView>
       </View>
-      {loading && (
-        <ActivityIndicator
-          animating={loading}
-          size="large"
-          color={colors.primary}
-        />
-      )}
       <FlatList
-        data={filteredProducts}
+        data={active === 0 ? products.reverse() : filteredProducts}
         keyExtractor={(data) => data.id.toString()}
         renderItem={({ item }) => (
           <Card
@@ -150,6 +144,11 @@ function ListingsScreen(props) {
             onPress={() => navigation.navigate("ListingDetails", item)}
           />
         )}
+        refreshing={loading}
+        onRefresh={() => {
+          setActive(0);
+          getProducts();
+        }}
       />
     </Screen>
   );
@@ -157,7 +156,7 @@ function ListingsScreen(props) {
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 10,
+    padding: 5,
     backgroundColor: colors.light,
     justifyContent: "center",
   },

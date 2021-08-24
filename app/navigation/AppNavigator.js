@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { View } from "react-native";
 import { connect } from "react-redux";
 
-import ListingEditScreen from "../screens/ListingEditScreen";
 import FeedNavigator from "./FeedNavigator";
 import AccountNavigator from "./AccountNavigator";
 import CartNavigator from "./CartNavigator";
 import colors from "../config/colors";
 import Text from "../components/Text";
+import AuthContext from "../auth/context";
+import AuthNavigator from "./AuthNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,8 +36,14 @@ const CartIcon = ({ length }) => {
 };
 
 const AppNavigator = (props) => {
+  const { user } = useContext(AuthContext);
   return (
-    <Tab.Navigator tabBarOptions={{ showLabel: false }}>
+    <Tab.Navigator
+      tabBarOptions={{
+        showLabel: false,
+        keyboardHidesTabBar: true,
+      }}
+    >
       <Tab.Screen
         name="Feed"
         component={FeedNavigator}
@@ -61,7 +68,7 @@ const AppNavigator = (props) => {
 
       <Tab.Screen
         name="Account"
-        component={AccountNavigator}
+        component={user ? AccountNavigator : AuthNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={30} />

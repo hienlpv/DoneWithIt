@@ -8,7 +8,6 @@ import {
   ListItemDeleteAction,
   ListItemSeparator,
 } from "../components/lists";
-import Button from "../components/Button";
 import Icon from "../components/Icon";
 import * as cartAction from "../redux/actions/cartItem";
 import Text from "../components/Text";
@@ -38,8 +37,9 @@ function CartScreen(props) {
   };
 
   return (
-    <Screen>
+    <Screen style={{ paddingTop: 0 }}>
       <FlatList
+        style={{ marginBottom: 10 }}
         data={cartItems}
         keyExtractor={(message) => message.id.toString()}
         renderItem={({ item }) => (
@@ -47,7 +47,6 @@ function CartScreen(props) {
             title={item.name}
             subTitle={`${formatVND(item.price)} x ${item.count}`}
             image={item.images[0]}
-            onPress={() => console.log("Message selected", item)}
             renderRightActions={() => (
               <ListItemDeleteAction
                 onPress={() => props.removeFromCart(item)}
@@ -75,16 +74,25 @@ function CartScreen(props) {
           >
             <Icon
               name="credit-card-check"
+              style={{ borderRadius: 5, width: 120, height: 50 }}
               backgroundColor={colors.primary}
-              size={50}
+              size={30}
+              text="Checkout"
             />
           </TouchableOpacity>
         ) : (
-          <Button
+          <TouchableOpacity
             style={styles.checkoutButton}
-            title="Login"
-            onPress={() => navigation.navigate("Welcome")}
-          />
+            onPress={() => navigation.navigate("Checkout")}
+          >
+            <Icon
+              name="account"
+              style={{ borderRadius: 5, width: 120, height: 50 }}
+              backgroundColor={colors.primary}
+              size={40}
+              text="LOGIN"
+            />
+          </TouchableOpacity>
         )}
       </View>
     </Screen>

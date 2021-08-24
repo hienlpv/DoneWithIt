@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView, ScrollView, StyleSheet } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
@@ -18,19 +23,23 @@ import { getCategories } from "../api/category";
 import { addProducts } from "../api/product";
 import UploadScreen from "./UploadScreen";
 import * as productActions from "../redux/actions/product";
+import Toast from "react-native-toast-message";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
+  brand: Yup.string().required().min(1).label("Brand"),
   price: Yup.string().required().min(1).label("Price"),
+  countInStock: Yup.number().required().min(1).label("Stock"),
   description: Yup.string().label("Description"),
   category: Yup.object().required().nullable().label("Category"),
   images: Yup.array().min(1, "Please select at least one image"),
 });
 
-function ListingEditScreen(props) {
+function ListingEditScreen({ route, fetchProducts }) {
+  const product = route.params.item;
+
   const [progress, setProgress] = useState(0);
   const [uploadVisible, setUploadVisible] = useState(false);
-  // const location = useLocation();
   const getCategoriesApi = useApi(getCategories);
 
   useEffect(() => {
@@ -39,14 +48,17 @@ function ListingEditScreen(props) {
 
   const handleSubmit = async (values, { resetForm }) => {
     values.price = values.price.replace(/\./g, "").replace(" VND", "");
+
     let dataPost = {
       images: [...values.images],
       name: values.title,
+      brand: values.brand,
       price: values.price,
-      category: values.category.id,
+      countInStock: values.countInStock,
       description: values.description,
-      countInStock: 10,
+      category: values.category.id,
     };
+
     setProgress(0);
     setUploadVisible(true);
 
@@ -57,12 +69,20 @@ function ListingEditScreen(props) {
     setUploadVisible(false);
 
     if (!res.ok) {
-      alert("Some thing went wrong! Could not Post Product!");
+      Alert.alert("ERROR", "Something went wrong! Cannot submit to Server");
       console.log(res.data);
-    } else alert("Success");
+    } else
+      Toast.show({
+        text1: "Successfully",
+        text2: "Your product has been created",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 30,
+        onPress: () => Toast.hide(),
+      });
 
     resetForm();
-    await props.fetchProducts();
+    await fetchProducts();
   };
 
   return (
@@ -72,11 +92,13 @@ function ListingEditScreen(props) {
         <ScrollView>
           <Form
             initialValues={{
-              title: "",
-              price: "",
-              description: "",
-              category: null,
-              images: [],
+              title: product ? product.name : "",
+              brand: product ? product.brand : "",
+              price: product ? product.price.toString() : "",
+              description: product ? product.description : "",
+              category: product ? product.category : "",
+              countInStock: product ? product.countInStock.toString() : "",
+              images: product ? product.images : [],
             }}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
@@ -84,10 +106,16 @@ function ListingEditScreen(props) {
             <FormImagePicker name="images" />
             <FormField maxLength={255} name="title" placeholder="Title" />
             <FormField
+              maxLength={255}
+              name="brand"
+              placeholder="Brand"
+              width="80%"
+            />
+            <FormField
               keyboardType="numeric"
               name="price"
               placeholder="Price"
-              width="80%"
+              width="70%"
             />
             <FormPicker
               width="50%"
@@ -96,6 +124,12 @@ function ListingEditScreen(props) {
               placeholder="Category"
               PickerItemComponent={CategoryPickerItem}
               numberOfColumn={3}
+            />
+            <FormField
+              keyboardType="numeric"
+              name="countInStock"
+              placeholder="Count in Stock"
+              width="55%"
             />
             <FormField
               maxLength={255}

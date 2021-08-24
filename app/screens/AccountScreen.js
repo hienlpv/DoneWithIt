@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 
 import Screen from "../components/Screen";
@@ -7,9 +7,16 @@ import colors from "../config/colors";
 import Icon from "../components/Icon";
 import AuthContext from "../auth/context";
 import authStorage from "../auth/storage";
-import { getUserInfo } from "../api/auth";
 
 const menuAdminItems = [
+  {
+    title: "Product List",
+    icon: {
+      name: "format-list-bulleted",
+      backgroundColor: colors.primary,
+    },
+    targetScreen: "Products",
+  },
   {
     title: "Categories",
     icon: {
@@ -27,20 +34,12 @@ const menuAdminItems = [
     targetScreen: "Orders",
   },
   {
-    title: "Product List",
-    icon: {
-      name: "format-list-bulleted",
-      backgroundColor: colors.primary,
-    },
-    targetScreen: "Feed",
-  },
-  {
     title: "Add Product",
     icon: {
       name: "plus",
       backgroundColor: colors.secondary,
     },
-    targetScreen: "ListingEdit",
+    targetScreen: "AddProduct",
   },
 ];
 

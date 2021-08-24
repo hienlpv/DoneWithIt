@@ -5,6 +5,7 @@ import MessagesScreen from "../screens/MessagesScreen";
 import ListingEditScreen from "../screens/ListingEditScreen";
 import OrderListScreen from "../screens/OrderListScreen";
 import OrderDetailsScreen from "../screens/OrderDetailsScreen";
+import ProductListScreen from "../screens/ProductListScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,19 +17,32 @@ const AccountNavigator = () => {
         component={AccountScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Messages" component={MessagesScreen} />
       <Stack.Screen
-        name="ListingEdit"
+        name="AddProduct"
         component={ListingEditScreen}
         options={{
           title: "Add Product",
         }}
       />
       <Stack.Screen
+        name="EditProduct"
+        component={ListingEditScreen}
+        options={{
+          title: "Edit Product",
+        }}
+      />
+      <Stack.Screen
         name="Orders"
         component={OrderListScreen}
         options={{
-          title: "Orders List",
+          title: "Order List",
+        }}
+      />
+      <Stack.Screen
+        name="Products"
+        component={ProductListScreen}
+        options={{
+          title: "Product List",
         }}
       />
       <Stack.Screen

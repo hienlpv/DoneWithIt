@@ -1,5 +1,5 @@
-import { getProducts } from "../../api/product";
-import { FETCH_PRODUCT } from "../constants";
+import { deleteProduct, getProducts } from "../../api/product";
+import { FETCH_PRODUCT, DELETE_PRODUCT } from "../constants";
 
 export const fetchProducts = (setFilteredProducts) => async (dispatch) => {
   let payload = [];
@@ -9,5 +9,13 @@ export const fetchProducts = (setFilteredProducts) => async (dispatch) => {
   dispatch({
     type: FETCH_PRODUCT,
     payload,
+  });
+};
+
+export const deleteProducts = (id) => async (dispatch) => {
+  await deleteProduct(id);
+  dispatch({
+    type: DELETE_PRODUCT,
+    payload: id,
   });
 };
