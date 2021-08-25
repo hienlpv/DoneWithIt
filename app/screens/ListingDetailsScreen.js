@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import Swiper from "react-native-swiper";
-import Toast from "react-native-toast-message";
 
 import colors from "../config/colors";
 import Screen from "../components/Screen";
@@ -18,30 +17,21 @@ import Icon from "../components/Icon";
 import * as cartAction from "../redux/actions/cartItem";
 import { formatVND } from "../utility/formatCurrency";
 
-function ListingDetailsScreen({ route, addToCart }) {
-  const listing = route.params;
+function ListingDetailsScreen({ route, addToCart, products }) {
+  const id = route.params;
+  const listing = products.filter((i) => i.id === id)[0];
 
   const [countInStock, setCountInStock] = useState(listing.countInStock);
 
   const handleAddProduct = async (product) => {
     await addToCart(product);
-    Toast.show({
-      type: "success",
-      position: "top",
-      text1: "Successfully",
-      text2: `${product.name} has been added to your Cart`,
-      visibilityTime: 2000,
-      autoHide: true,
-      topOffset: 30,
-      onPress: () => Toast.hide(),
-    });
     setCountInStock(countInStock - 1);
   };
 
   const status =
     listing.countInStock > 0
-      ? { title: "In Stock", color: colors.secondary }
-      : { title: "Out of Stock", color: colors.danger };
+      ? { title: "Còn hàng", color: colors.secondary }
+      : { title: "Hết hàng", color: colors.danger };
 
   return (
     <Screen style={{ paddingTop: 0 }}>
@@ -66,32 +56,42 @@ function ListingDetailsScreen({ route, addToCart }) {
           <Text style={styles.name}>{listing.name}</Text>
           <View style={styles.priceContainer}>
             <Text style={styles.price}>{formatVND(listing.price)}</Text>
-            {countInStock > 0 ? (
-              <TouchableOpacity onPress={() => handleAddProduct(listing)}>
-                <Icon
-                  style={{ borderRadius: 5, width: 80, height: 40 }}
-                  name="cart-plus"
-                  backgroundColor={colors.primary}
-                  size={30}
-                  text="ADD"
-                />
-              </TouchableOpacity>
-            ) : null}
+            <TouchableOpacity onPress={() => handleAddProduct(listing)}>
+              <Icon
+                style={{ borderRadius: 5, width: 80, height: 40 }}
+                name="cart-plus"
+                backgroundColor={colors.primary}
+                size={30}
+                text="Add"
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.detailsContainer}>
-          <Text style={styles.title}>Details</Text>
+          <Text style={styles.title}>Chi tiết</Text>
           <View style={styles.detailOdd}>
-            <Text style={styles.left}>Brand</Text>
+            <Text style={styles.left}>Thương hiệu</Text>
             <Text style={styles.right}>{listing.brand}</Text>
           </View>
           <View style={styles.detailEven}>
-            <Text style={styles.left}>Category</Text>
+            <Text style={styles.left}>Loại</Text>
             <Text style={styles.right}>{listing.category.name}</Text>
           </View>
           <View style={styles.detailOdd}>
-            <Text style={styles.left}>Status</Text>
+            <Text style={styles.left}>Nồng độ</Text>
+            <Text style={styles.right}>{listing.concentration}</Text>
+          </View>
+          <View style={styles.detailEven}>
+            <Text style={styles.left}>Thể tích</Text>
+            <Text style={styles.right}>{listing.volume}</Text>
+          </View>
+          <View style={styles.detailOdd}>
+            <Text style={styles.left}>Xuất xứ</Text>
+            <Text style={styles.right}>{listing.origin}</Text>
+          </View>
+          <View style={styles.detailEven}>
+            <Text style={styles.left}>Trạng thái</Text>
             <Text style={[styles.right, { color: status.color }]}>
               {status.title}
             </Text>
@@ -99,8 +99,10 @@ function ListingDetailsScreen({ route, addToCart }) {
         </View>
 
         <View style={styles.detailsContainer}>
-          <Text style={styles.title}>Description</Text>
-          <Text style={{ padding: 10 }}>{listing.description}</Text>
+          <Text style={styles.title}>Mô tả</Text>
+          <Text style={{ paddingHorizontal: 10, lineHeight: 25 }}>
+            {listing.description}
+          </Text>
         </View>
       </ScrollView>
     </Screen>
@@ -163,4 +165,7 @@ const mapDispatchToProps = (dispatch) => ({
   addToCart: async (item) => dispatch(cartAction.addToCart(item)),
 });
 
-export default connect(null, mapDispatchToProps)(ListingDetailsScreen);
+export default connect(
+  (state) => ({ products: state.products }),
+  mapDispatchToProps
+)(ListingDetailsScreen);

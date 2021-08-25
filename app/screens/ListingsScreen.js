@@ -18,6 +18,7 @@ import { formatVND } from "../utility/formatCurrency";
 import AppTextInput from "../components/TextInput";
 import { ListItem, ListItemSeparator } from "../components/lists";
 import Icon from "../components/Icon";
+import { color } from "react-native-reanimated";
 
 function ListingsScreen(props) {
   const { navigation, products, fetchProducts } = props;
@@ -139,9 +140,14 @@ function ListingsScreen(props) {
         renderItem={({ item }) => (
           <Card
             title={item.name}
-            subTitle={formatVND(item.price)}
+            subTitle={
+              item.countInStock === 0
+                ? "Tạm thời hết hàng"
+                : formatVND(item.price)
+            }
             imageURL={item.images[0]}
-            onPress={() => navigation.navigate("ListingDetails", item)}
+            onPress={() => navigation.navigate("ListingDetails", item.id)}
+            color={item.countInStock === 0 ? colors.danger : colors.secondary}
           />
         )}
         refreshing={loading}

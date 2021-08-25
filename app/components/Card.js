@@ -9,7 +9,7 @@ import {
 import AppText from "./Text";
 import colors from "../config/colors";
 
-function Card({ title, subTitle, imageURL, onPress }) {
+function Card({ title, subTitle, imageURL, onPress, color }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
@@ -21,7 +21,14 @@ function Card({ title, subTitle, imageURL, onPress }) {
         <View style={styles.detailsContainer}>
           <AppText style={styles.title}>{title}</AppText>
           <View style={styles.priceContainer}>
-            <AppText style={styles.subTitle}>{subTitle}</AppText>
+            <AppText
+              style={[
+                styles.subTitle,
+                { color: color ? color : colors.secondary },
+              ]}
+            >
+              {subTitle}
+            </AppText>
           </View>
         </View>
       </View>
@@ -51,7 +58,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     color: colors.secondary,
-    fontWeight: "bold",
+    fontWeight: "300",
   },
   title: {
     marginBottom: 7,

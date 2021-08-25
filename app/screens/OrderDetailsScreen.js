@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
+import Toast from "react-native-toast-message";
+
 import { getUserOrder, updateStatus } from "../api/order";
 import { ListItem, ListItemSeparator } from "../components/lists";
-
 import Screen from "../components/Screen";
 import AppText from "../components/Text";
 import Picker from "../components/Picker";
@@ -12,6 +13,7 @@ import { formatVND } from "../utility/formatCurrency";
 function OrderDetailsScreen({ route }) {
   const order = route.params.item;
   const isAdmin = route.params.isAdmin;
+  const getOrders = route.params.getOrders;
 
   const [status, setStatus] = useState(order.status);
   const [orderItems, setOrderItems] = useState([]);
@@ -43,7 +45,8 @@ function OrderDetailsScreen({ route }) {
     const res = await getUserOrder(order._id);
     setLoading(false);
 
-    if (!res.ok) return console.log(res.data);
+    if (!res.ok) return;
+
     setOrderItems(res.data.orderItems);
   };
 
@@ -66,8 +69,31 @@ function OrderDetailsScreen({ route }) {
     const res = await updateStatus(order.id, { status: label });
     setUpdating(false);
 
-    if (!res.ok) return console.log(res.data);
-    console.log(res.data);
+    if (!res.ok) {
+      setStatus(order.status);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Fail",
+        text2: "Cập nhật trạng thái thất bại! Vui lòng thử lại!",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 30,
+        onPress: () => Toast.hide(),
+      });
+      return;
+    }
+    Toast.show({
+      type: "success",
+      position: "top",
+      text1: "Successfully",
+      text2: "Cập nhật thành công",
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 30,
+      onPress: () => Toast.hide(),
+    });
+    getOrders();
   };
 
   return (

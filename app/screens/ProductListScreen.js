@@ -10,6 +10,7 @@ import {
 import Text from "../components/Text";
 import { formatVND } from "../utility/formatCurrency";
 import * as productAction from "../redux/actions/product";
+import colors from "../config/colors";
 
 function ProductListScreen(props) {
   const { products, deleteProduct, navigation } = props;
@@ -21,11 +22,16 @@ function ProductListScreen(props) {
     setLoading(false);
   };
 
+  if (products.length === 0) {
+    return (
+      <Screen>
+        <Text style={{ textAlign: "center" }}>Không có sản phẩm nào</Text>
+      </Screen>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      {products.length === 0 && (
-        <Text style={{ textAlign: "center" }}>Your Product List is Empty</Text>
-      )}
       <FlatList
         data={products}
         keyExtractor={(product) => product.id.toString()}
@@ -52,6 +58,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    backgroundColor: colors.light,
   },
 });
 

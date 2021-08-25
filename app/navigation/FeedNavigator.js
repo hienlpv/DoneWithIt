@@ -16,7 +16,7 @@ const FeedNavigator = () => {
       <Stack.Screen
         name="ListingDetails"
         component={ListingDetailsScreen}
-        options={{ title: "Listing Details" }}
+        options={{ title: "Chi tiết sản phẩm" }}
       />
     </Stack.Navigator>
   );

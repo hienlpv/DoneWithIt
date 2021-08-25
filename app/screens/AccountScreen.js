@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
+import colorRandom from "random-color";
 
 import Screen from "../components/Screen";
 import { ListItem, ListItemSeparator } from "../components/lists";
@@ -10,34 +11,34 @@ import authStorage from "../auth/storage";
 
 const menuAdminItems = [
   {
-    title: "Product List",
+    title: "Sản phẩm",
     icon: {
       name: "format-list-bulleted",
-      backgroundColor: colors.primary,
+      backgroundColor: colorRandom().hexString(),
     },
     targetScreen: "Products",
   },
   {
-    title: "Categories",
+    title: "Loại",
     icon: {
       name: "format-list-bulleted",
-      backgroundColor: colors.danger,
+      backgroundColor: colorRandom().hexString(),
     },
-    targetScreen: "Feed",
+    targetScreen: "Categories",
   },
   {
-    title: "Order List",
+    title: "Đơn hàng",
     icon: {
       name: "format-list-bulleted",
-      backgroundColor: colors.medium,
+      backgroundColor: colorRandom().hexString(),
     },
     targetScreen: "Orders",
   },
   {
-    title: "Add Product",
+    title: "Thêm sản phẩm",
     icon: {
       name: "plus",
-      backgroundColor: colors.secondary,
+      backgroundColor: colorRandom().hexString(),
     },
     targetScreen: "AddProduct",
   },
@@ -45,7 +46,7 @@ const menuAdminItems = [
 
 const menuUserItems = [
   {
-    title: "My Orders",
+    title: "Đơn hàng của tôi",
     icon: {
       name: "format-list-bulleted",
       backgroundColor: colors.primary,

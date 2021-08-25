@@ -4,6 +4,6 @@ export const formatVND = (price) => {
     price
       .toFixed(0)
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
-      .replace(" VND", "") + " VND"
+      .replace("đ", "") + "đ"
   );
 };

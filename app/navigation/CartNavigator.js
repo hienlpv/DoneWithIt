@@ -8,8 +8,16 @@ const Stack = createStackNavigator();
 const CartNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Cart" component={CartScreen} />
-      <Stack.Screen name="Checkout" component={CheckoutScreen} />
+      <Stack.Screen
+        name="Cart"
+        component={CartScreen}
+        options={{ title: "Giỏ hàng" }}
+      />
+      <Stack.Screen
+        name="Checkout"
+        component={CheckoutScreen}
+        options={{ title: "Thanh toán" }}
+      />
     </Stack.Navigator>
   );
 };

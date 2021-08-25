@@ -22,7 +22,7 @@ function CartScreen(props) {
   if (cartItems.length === 0)
     return (
       <Screen>
-        <Text style={{ textAlign: "center" }}>Your Cart is Empty</Text>
+        <Text style={{ textAlign: "center" }}>Giỏ hàng hiện đang rỗng</Text>
       </Screen>
     );
 
@@ -59,11 +59,11 @@ function CartScreen(props) {
       <View style={styles.checkoutContainer}>
         <View style={styles.checkoutDetail}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={styles.left}>Count:</Text>
+            <Text style={styles.left}>Số lượng:</Text>
             <Text style={styles.right}>{cartItems.length}</Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={styles.left}>Total:</Text>
+            <Text style={styles.left}>Tổng tiền:</Text>
             <Text style={styles.right}>{formatVND(Total())}</Text>
           </View>
         </View>
@@ -90,7 +90,7 @@ function CartScreen(props) {
               style={{ borderRadius: 5, width: 120, height: 50 }}
               backgroundColor={colors.primary}
               size={40}
-              text="LOGIN"
+              text="Login"
             />
           </TouchableOpacity>
         )}

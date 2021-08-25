@@ -64,7 +64,15 @@ function CheckoutScreen(props) {
     setUploadVisible(false);
 
     if (!result.ok)
-      return Alert.alert("Something went wrong!", "Your order cannot create");
+      return Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Fail",
+        text2: "Không thể tạo đơn hàng",
+        visibilityTime: 2000,
+        autoHide: true,
+        topOffset: 30,
+      });
 
     setErrorMessage(false);
     clearCart();
@@ -74,7 +82,7 @@ function CheckoutScreen(props) {
       type: "success",
       position: "top",
       text1: "Successfully",
-      text2: "Your order has been created",
+      text2: "Đơn hàng của bạn đã được tạo",
       visibilityTime: 2000,
       autoHide: true,
       topOffset: 30,
@@ -107,7 +115,7 @@ function CheckoutScreen(props) {
               initialValues={{
                 shippingAddress1: "",
                 city: "",
-                phone: "",
+                phone: user.phone,
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
@@ -116,13 +124,13 @@ function CheckoutScreen(props) {
                 autoCorrect={false}
                 icon="city"
                 name="city"
-                placeholder="City"
+                placeholder="Thành phố"
               />
               <FormField
                 autoCorrect={false}
                 icon="map-marker"
                 name="shippingAddress1"
-                placeholder="Address"
+                placeholder="Địa chỉ"
               />
 
               <FormField
@@ -131,9 +139,9 @@ function CheckoutScreen(props) {
                 keyboardType="numeric"
                 icon="phone"
                 name="phone"
-                placeholder="Phone"
+                placeholder="Số ĐT"
               />
-              <SubmitButton title="Submit" />
+              <SubmitButton title="Đặt hàng" />
             </Form>
           </View>
         </ScrollView>

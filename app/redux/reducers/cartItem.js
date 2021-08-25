@@ -1,7 +1,33 @@
+import Toast from "react-native-toast-message";
 import { ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART } from "../constants";
 
 const addToCart = (state, payload) => {
-  if (state.length === 0) return [...state, { ...payload, count: 1 }];
+  if (payload.countInStock === 0) {
+    Toast.show({
+      type: "error",
+      position: "top",
+      text1: "Fail",
+      text2: "Sản phẩm này đã hết hàng",
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 30,
+      onPress: () => Toast.hide(),
+    });
+    return state;
+  }
+  if (state.length === 0) {
+    Toast.show({
+      type: "success",
+      position: "top",
+      text1: "Successfully",
+      text2: `${payload.name} đã thêm vào giỏ hàng`,
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 30,
+      onPress: () => Toast.hide(),
+    });
+    return [...state, { ...payload, count: 1 }];
+  }
 
   let newState = [...state];
   let find = false;
@@ -14,10 +40,46 @@ const addToCart = (state, payload) => {
     }
   });
 
-  if (find) newState[i].count++;
-  else newState.push({ ...payload, count: 1 });
+  if (!find) {
+    Toast.show({
+      type: "success",
+      position: "top",
+      text1: "Successfully",
+      text2: `${payload.name} đã thêm vào giỏ hàng`,
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 30,
+      onPress: () => Toast.hide(),
+    });
+    return newState.push({ ...payload, count: 1 });
+  }
 
-  return newState;
+  if (state[i].count < payload.countInStock) {
+    Toast.show({
+      type: "success",
+      position: "top",
+      text1: "Successfully",
+      text2: `${payload.name} đã thêm vào giỏ hàng`,
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 30,
+      onPress: () => Toast.hide(),
+    });
+    newState[i].count++;
+    return newState;
+  } else {
+    Toast.show({
+      type: "error",
+      position: "top",
+      text1: "Fail",
+      text2: "Đã vượt quá số lượng có thể thêm vào giỏ hàng",
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 30,
+      onPress: () => Toast.hide(),
+    });
+    return newState;
+  }
 };
 
 const cartItems = (state = [], action) => {

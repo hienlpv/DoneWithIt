@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
+import { StyleSheet, FlatList } from "react-native";
 import moment from "moment";
 
 import { getUserOrders, fetchOrders } from "../api/order";
@@ -35,11 +35,16 @@ function OrderListScreen(props) {
     getOrders();
   }, []);
 
+  if (orders.length === 0 && !loading) {
+    return (
+      <Screen>
+        <Text style={{ textAlign: "center" }}>Không có đơn hàng nào</Text>
+      </Screen>
+    );
+  }
+
   return (
     <Screen style={styles.screen}>
-      {orders.length === 0 && !loading && (
-        <Text style={{ textAlign: "center" }}>Your Order List is Empty</Text>
-      )}
       <FlatList
         data={orders}
         keyExtractor={(order) => order.id.toString()}
@@ -55,7 +60,7 @@ function OrderListScreen(props) {
               />
             }
             onPress={() =>
-              navigation.navigate("OrderDetails", { item, isAdmin })
+              navigation.navigate("OrderDetails", { item, isAdmin, getOrders })
             }
           />
         )}

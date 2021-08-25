@@ -3,21 +3,26 @@ import { useFormikContext } from "formik";
 
 import AppTextInput from "../TextInput";
 import ErrorMessage from "./ErrorMessage";
+import { formatVND } from "../../utility/formatCurrency";
 
 function AppFormField({ name, width, ...otherProps }) {
   const { setFieldTouched, setFieldValue, errors, touched, values } =
     useFormikContext();
 
   const changeText = (name) => {
-    if (name === "price") {
-      let price = parseInt(values[name].replace(/\./g, "").replace(" VND", ""));
-      price =
-        price
-          .toFixed(0)
-          .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
-          .replace(" VND", "") + " VND";
-      setFieldValue(name, price);
+    switch (name) {
+      case "price":
+        let price = parseInt(values[name].replace(/\./g, "").replace("đ", ""));
+        setFieldValue(name, formatVND(price));
+        break;
+      case "concentration":
+        setFieldValue(name, `${values[name]}%`);
+        break;
+      case "volume":
+        setFieldValue(name, `${values[name]}ml`);
+        break;
     }
+
     setFieldTouched(name);
   };
 

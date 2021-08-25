@@ -6,6 +6,7 @@ import ListingEditScreen from "../screens/ListingEditScreen";
 import OrderListScreen from "../screens/OrderListScreen";
 import OrderDetailsScreen from "../screens/OrderDetailsScreen";
 import ProductListScreen from "../screens/ProductListScreen";
+import CategoriesScreen from "../screens/CategoriesScreen";
 
 const Stack = createStackNavigator();
 
@@ -21,35 +22,42 @@ const AccountNavigator = () => {
         name="AddProduct"
         component={ListingEditScreen}
         options={{
-          title: "Add Product",
+          title: "Thêm sản phẩm",
         }}
       />
       <Stack.Screen
         name="EditProduct"
         component={ListingEditScreen}
         options={{
-          title: "Edit Product",
+          title: "Sửa sản phẩm",
         }}
       />
       <Stack.Screen
         name="Orders"
         component={OrderListScreen}
         options={{
-          title: "Order List",
+          title: "Danh sách đơn hàng",
         }}
       />
       <Stack.Screen
         name="Products"
         component={ProductListScreen}
         options={{
-          title: "Product List",
+          title: "Danh sách sản phẩm",
         }}
       />
       <Stack.Screen
         name="OrderDetails"
         component={OrderDetailsScreen}
         options={{
-          title: "Order Details",
+          title: "Chi tiết đơn hàng",
+        }}
+      />
+      <Stack.Screen
+        name="Categories"
+        component={CategoriesScreen}
+        options={{
+          title: "Danh sách loại",
         }}
       />
     </Stack.Navigator>

@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Alert,
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import { KeyboardAvoidingView, ScrollView, StyleSheet } from "react-native";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 
@@ -16,14 +11,11 @@ import {
   SubmitButton,
 } from "../components/forms";
 import Screen from "../components/Screen";
+import UploadScreen from "./UploadScreen";
 import CategoryPickerItem from "../components/CategoryPickerItem";
-// import useLocation from "../hooks/useLocation";
 import useApi from "../hooks/useApi";
 import { getCategories } from "../api/category";
-import { addProducts } from "../api/product";
-import UploadScreen from "./UploadScreen";
 import * as productActions from "../redux/actions/product";
-import Toast from "react-native-toast-message";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
@@ -35,7 +27,7 @@ const validationSchema = Yup.object().shape({
   images: Yup.array().min(1, "Please select at least one image"),
 });
 
-function ListingEditScreen({ route, fetchProducts }) {
+function ListingEditScreen({ route, addProduct, updateProduct }) {
   const product = route.params.item;
 
   const [progress, setProgress] = useState(0);
@@ -47,7 +39,7 @@ function ListingEditScreen({ route, fetchProducts }) {
   }, []);
 
   const handleSubmit = async (values, { resetForm }) => {
-    values.price = values.price.replace(/\./g, "").replace(" VND", "");
+    values.price = values.price.replace(/\./g, "").replace("đ", "");
 
     let dataPost = {
       images: [...values.images],
@@ -56,33 +48,21 @@ function ListingEditScreen({ route, fetchProducts }) {
       price: values.price,
       countInStock: values.countInStock,
       description: values.description,
-      category: values.category.id,
+      category: product ? values.category._id : values.category.id,
+      concentration: values.concentration,
+      volume: values.volume,
+      origin: values.origin,
     };
 
     setProgress(0);
     setUploadVisible(true);
 
-    const res = await addProducts(dataPost, (progress) =>
-      setProgress(progress)
-    );
+    product
+      ? await updateProduct(product.id, dataPost, setProgress)
+      : await addProduct(dataPost, setProgress);
 
     setUploadVisible(false);
-
-    if (!res.ok) {
-      Alert.alert("ERROR", "Something went wrong! Cannot submit to Server");
-      console.log(res.data);
-    } else
-      Toast.show({
-        text1: "Successfully",
-        text2: "Your product has been created",
-        visibilityTime: 2000,
-        autoHide: true,
-        topOffset: 30,
-        onPress: () => Toast.hide(),
-      });
-
     resetForm();
-    await fetchProducts();
   };
 
   return (
@@ -99,44 +79,66 @@ function ListingEditScreen({ route, fetchProducts }) {
               category: product ? product.category : "",
               countInStock: product ? product.countInStock.toString() : "",
               images: product ? product.images : [],
+              concentration: product ? product.concentration : "",
+              volume: product ? product.volume : "",
+              origin: product ? product.origin : "",
             }}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
           >
             <FormImagePicker name="images" />
-            <FormField maxLength={255} name="title" placeholder="Title" />
-            <FormField
-              maxLength={255}
-              name="brand"
-              placeholder="Brand"
-              width="80%"
-            />
-            <FormField
-              keyboardType="numeric"
-              name="price"
-              placeholder="Price"
-              width="70%"
-            />
+            <FormField maxLength={255} name="title" placeholder="Tên" />
             <FormPicker
               width="50%"
               items={getCategoriesApi.data}
               name="category"
-              placeholder="Category"
+              placeholder="Loại"
               PickerItemComponent={CategoryPickerItem}
               numberOfColumn={3}
             />
             <FormField
+              maxLength={255}
+              name="brand"
+              placeholder="Thương hiệu"
+              width="80%"
+            />
+            <FormField
               keyboardType="numeric"
-              name="countInStock"
-              placeholder="Count in Stock"
-              width="55%"
+              maxLength={255}
+              name="concentration"
+              placeholder="Nồng độ"
+              width="50%"
+            />
+            <FormField
+              keyboardType="numeric"
+              maxLength={255}
+              name="volume"
+              placeholder="Thể tích"
+              width="50%"
             />
             <FormField
               maxLength={255}
+              name="origin"
+              placeholder="Xuất xứ"
+              width="50%"
+            />
+            <FormField
+              keyboardType="numeric"
+              name="countInStock"
+              placeholder="Số lượng"
+              width="55%"
+            />
+            <FormField
+              keyboardType="numeric"
+              name="price"
+              placeholder="Giá"
+              width="70%"
+            />
+            <FormField
               multiline
               name="description"
               numberOfLines={3}
-              placeholder="Description"
+              placeholder="Mô tả"
             />
             <SubmitButton title="Post" />
           </Form>
@@ -152,5 +154,8 @@ const styles = StyleSheet.create({
   },
 });
 export default connect(null, (dispatch) => ({
-  fetchProducts: async () => dispatch(productActions.fetchProducts()),
+  addProduct: async (data, setProgress) =>
+    dispatch(productActions.addProducts(data, setProgress)),
+  updateProduct: async (id, data, setProgress) =>
+    dispatch(productActions.updateProducts(id, data, setProgress)),
 }))(ListingEditScreen);
