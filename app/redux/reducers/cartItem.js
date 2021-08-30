@@ -51,7 +51,8 @@ const addToCart = (state, payload) => {
       topOffset: 30,
       onPress: () => Toast.hide(),
     });
-    return newState.push({ ...payload, count: 1 });
+    newState.push({ ...payload, count: 1 });
+    return newState;
   }
 
   if (state[i].count < payload.countInStock) {

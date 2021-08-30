@@ -18,7 +18,6 @@ import { formatVND } from "../utility/formatCurrency";
 import AppTextInput from "../components/TextInput";
 import { ListItem, ListItemSeparator } from "../components/lists";
 import Icon from "../components/Icon";
-import { color } from "react-native-reanimated";
 
 function ListingsScreen(props) {
   const { navigation, products, fetchProducts } = props;
@@ -28,7 +27,6 @@ function ListingsScreen(props) {
   const [active, setActive] = useState(0);
   const [searchActive, setSearchActive] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState(products);
-  const [countInStock, setCountInStock] = useState(products.countInStock);
 
   const getProducts = async () => {
     setLoading(true);
@@ -88,9 +86,13 @@ function ListingsScreen(props) {
           renderItem={({ item }) => (
             <ListItem
               title={item.name}
-              subTitle={formatVND(item.price)}
+              subTitle={
+                item.countInStock === 0
+                  ? "Tạm thời hết hàng"
+                  : formatVND(item.price)
+              }
               image={item.images[0]}
-              onPress={() => navigation.navigate("ListingDetails", item)}
+              onPress={() => navigation.navigate("ListingDetails", item.id)}
             />
           )}
           ItemSeparatorComponent={ListItemSeparator}

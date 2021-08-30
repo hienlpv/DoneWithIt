@@ -11,6 +11,8 @@ import colors from "../config/colors";
 import Text from "../components/Text";
 import AuthContext from "../auth/context";
 import AuthNavigator from "./AuthNavigator";
+import useNotifications from "../hooks/useNotifications";
+import { navigate } from "./rootNavigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -37,6 +39,8 @@ const CartIcon = ({ length }) => {
 
 const AppNavigator = (props) => {
   const { user } = useContext(AuthContext);
+  if (user) useNotifications(() => navigate("Account"));
+
   return (
     <Tab.Navigator
       tabBarOptions={{

@@ -83,7 +83,7 @@ function CartScreen(props) {
         ) : (
           <TouchableOpacity
             style={styles.checkoutButton}
-            onPress={() => navigation.navigate("Checkout")}
+            onPress={() => navigation.navigate("Account")}
           >
             <Icon
               name="account"

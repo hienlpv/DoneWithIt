@@ -4,7 +4,6 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   View,
-  Alert,
 } from "react-native";
 import * as Yup from "yup";
 import Toast from "react-native-toast-message";
