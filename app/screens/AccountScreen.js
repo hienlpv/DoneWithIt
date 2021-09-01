@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import colorRandom from "random-color";
 
-import Screen from "../components/Screen";
 import { ListItem, ListItemSeparator } from "../components/lists";
+import Screen from "../components/Screen";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
 import AuthContext from "../auth/context";
@@ -21,7 +21,7 @@ const menuAdminItems = [
   {
     title: "Loại",
     icon: {
-      name: "format-list-bulleted",
+      name: "apps",
       backgroundColor: colorRandom().hexString(),
     },
     targetScreen: "Categories",
@@ -29,10 +29,18 @@ const menuAdminItems = [
   {
     title: "Đơn hàng",
     icon: {
-      name: "format-list-bulleted",
+      name: "ballot",
       backgroundColor: colorRandom().hexString(),
     },
     targetScreen: "Orders",
+  },
+  {
+    title: "Khách hàng",
+    icon: {
+      name: "account",
+      backgroundColor: colorRandom().hexString(),
+    },
+    targetScreen: "Users",
   },
   {
     title: "Thêm sản phẩm",
@@ -65,10 +73,11 @@ function AccountScreen({ navigation }) {
 
   return (
     <Screen style={styles.screen}>
-      <View style={styles.container}>
+      <View>
         <ListItem
           title={user.name}
           subTitle={user.email}
+          onPress={() => navigation.navigate("UserEdit")}
           IconComponent={
             user.isAdmin ? (
               <Icon name="account-cog" size={80} />
@@ -115,7 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
   },
   container: {
-    marginVertical: 20,
+    marginVertical: 15,
   },
 });
 

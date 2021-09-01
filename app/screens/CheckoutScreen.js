@@ -26,7 +26,6 @@ import * as cartActions from "../redux/actions/cartItem";
 import * as productActions from "../redux/actions/product";
 
 const validationSchema = Yup.object().shape({
-  shippingAddress1: Yup.string().required().label("Address"),
   city: Yup.string().required().label("City"),
   phone: Yup.string().required().label("Phone"),
 });
@@ -49,8 +48,9 @@ function CheckoutScreen(props) {
 
     const dataPost = {
       orderItems,
-      ...values,
       user: user.id,
+      phone: values.phone,
+      shippingAddress1: `${values.apartment} - ${values.street} - ${values.city}`,
     };
 
     setProgress(0);
@@ -62,7 +62,8 @@ function CheckoutScreen(props) {
 
     setUploadVisible(false);
 
-    if (!result.ok)
+    if (!result.ok) {
+      console.log(result.data);
       return Toast.show({
         type: "error",
         position: "top",
@@ -72,7 +73,7 @@ function CheckoutScreen(props) {
         autoHide: true,
         topOffset: 30,
       });
-
+    }
     setErrorMessage(false);
     clearCart();
     navigation.navigate("Cart");
@@ -112,26 +113,32 @@ function CheckoutScreen(props) {
           <View style={styles.container}>
             <Form
               initialValues={{
-                shippingAddress1: "",
-                city: "",
+                city: user.city,
                 phone: user.phone,
+                apartment: user.apartment,
+                street: user.street,
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
               <FormField
                 autoCorrect={false}
-                icon="city"
-                name="city"
-                placeholder="Thành phố"
+                icon="map-marker"
+                name="apartment"
+                placeholder="Địa chỉ"
               />
               <FormField
                 autoCorrect={false}
-                icon="map-marker"
-                name="shippingAddress1"
-                placeholder="Địa chỉ"
+                icon="city"
+                name="street"
+                placeholder="Quận/huyện"
               />
-
+              <FormField
+                autoCorrect={false}
+                icon="city"
+                name="city"
+                placeholder="Tỉnh/Thành phố"
+              />
               <FormField
                 autoCapitalize="none"
                 autoCorrect={false}

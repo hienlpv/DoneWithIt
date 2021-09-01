@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import store from "./app/redux/store";
 import AppLoading from "expo-app-loading";
 import Toast from "react-native-toast-message";
+import { LogBox } from "react-native";
 
 import navigationTheme from "./app/navigation/navigationTheme";
 import AppNavigator from "./app/navigation/AppNavigator";
@@ -14,6 +15,8 @@ import jwtDecode from "jwt-decode";
 import { navigationRef } from "./app/navigation/rootNavigation";
 
 export default function App() {
+  LogBox.ignoreAllLogs();
+
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
 

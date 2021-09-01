@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, Alert } from "react-native";
 
 import {
   ListItem,
@@ -13,13 +13,31 @@ import * as productAction from "../redux/actions/product";
 import colors from "../config/colors";
 
 function ProductListScreen(props) {
-  const { products, deleteProduct, navigation } = props;
+  const { products, deleteProduct, fetchProducts, navigation } = props;
   const [loading, setLoading] = useState(false);
 
-  const handleDelete = async (id) => {
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  const getProducts = async () => {
     setLoading(true);
-    await deleteProduct(id);
+    await fetchProducts();
     setLoading(false);
+  };
+
+  const handleDelete = async (id) => {
+    Alert.alert("WARNING", "Bạn thật sự muốn xoá sản phẩm này?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "OK",
+        onPress: async () => {
+          setLoading(true);
+          await deleteProduct(id);
+          setLoading(false);
+        },
+      },
+    ]);
   };
 
   if (products.length === 0) {
@@ -47,7 +65,7 @@ function ProductListScreen(props) {
           />
         )}
         refreshing={loading}
-        onRefresh={() => {}}
+        onRefresh={() => getProducts()}
         ItemSeparatorComponent={ListItemSeparator}
       />
     </View>
@@ -65,6 +83,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({ products: state.products });
 const mapDispatchToProps = (dispatch) => ({
   deleteProduct: (id) => dispatch(productAction.deleteProducts(id)),
+  fetchProducts: async () => dispatch(productAction.deleteProducts()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductListScreen);

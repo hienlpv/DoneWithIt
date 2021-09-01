@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import {
   FlatList,
   StyleSheet,
@@ -6,17 +7,16 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import { connect } from "react-redux";
 
+import { getCategories } from "../api/category";
+import { formatVND } from "../utility/formatCurrency";
+import { ListItem, ListItemSeparator } from "../components/lists";
+import * as productAction from "../redux/actions/product";
 import Screen from "../components/Screen";
 import Card from "../components/Card";
 import Text from "../components/Text";
 import colors from "../config/colors";
-import * as productAction from "../redux/actions/product";
-import { getCategories } from "../api/category";
-import { formatVND } from "../utility/formatCurrency";
 import AppTextInput from "../components/TextInput";
-import { ListItem, ListItemSeparator } from "../components/lists";
 import Icon from "../components/Icon";
 
 function ListingsScreen(props) {
@@ -40,16 +40,16 @@ function ListingsScreen(props) {
 
   const handleActive = (id) => {
     setActive(id);
-    if (id === 0) setFilteredProducts(products.reverse());
+    if (id === 0) setFilteredProducts(products);
     else
       setFilteredProducts(
-        products.reverse().filter((product) => product.category._id === id)
+        products.filter((product) => product.category._id === id)
       );
   };
 
   const search = (text) => {
     setFilteredProducts(
-      products.reverse().filter((product) => product.name.includes(text))
+      products.filter((product) => product.name.includes(text))
     );
   };
 
@@ -137,7 +137,7 @@ function ListingsScreen(props) {
         </ScrollView>
       </View>
       <FlatList
-        data={active === 0 ? products.reverse() : filteredProducts}
+        data={active === 0 ? products : filteredProducts}
         keyExtractor={(data) => data.id.toString()}
         renderItem={({ item }) => (
           <Card
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   categoriesContainer: {
     backgroundColor: colors.white,
     borderRadius: 10,
-    marginVertical: 10,
+    marginBottom: 10,
     padding: 10,
   },
   categories: {

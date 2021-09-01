@@ -36,6 +36,11 @@ function OrderDetailsScreen({ route }) {
       label: "Done",
       color: "green",
     },
+    {
+      id: 4,
+      label: "Cancel",
+      color: "red",
+    },
   ];
 
   const getOrderDetail = async () => {
@@ -81,6 +86,7 @@ function OrderDetailsScreen({ route }) {
         topOffset: 30,
         onPress: () => Toast.hide(),
       });
+      console.log(res.status);
       return;
     }
     Toast.show({
@@ -108,7 +114,7 @@ function OrderDetailsScreen({ route }) {
 
         <View style={styles.container}>
           <AppText style={styles.header}>Status</AppText>
-          {isAdmin ? (
+          {isAdmin && order.status !== "Cancel" ? (
             <View style={styles.content}>
               <Picker
                 width="60%"
@@ -127,10 +133,14 @@ function OrderDetailsScreen({ route }) {
             </AppText>
           )}
         </View>
-        <View style={styles.container}>
-          <AppText style={styles.header}>City</AppText>
-          <AppText style={styles.content}>{order.city}</AppText>
-        </View>
+        {order.status === "Cancel" && (
+          <View style={styles.container}>
+            <AppText style={styles.header}>Reason</AppText>
+            <AppText style={[styles.content, { fontSize: 16 }]}>
+              {order.reasonCancel}
+            </AppText>
+          </View>
+        )}
         <View style={styles.container}>
           <AppText style={styles.header}>Address</AppText>
           <AppText style={[styles.content, { fontSize: 16 }]}>

@@ -47,6 +47,7 @@ const AppNavigator = (props) => {
         showLabel: false,
         keyboardHidesTabBar: true,
       }}
+      lazy={false}
     >
       <Tab.Screen
         name="Feed"
@@ -56,6 +57,11 @@ const AppNavigator = (props) => {
             <MaterialCommunityIcons name="home" color={color} size={30} />
           ),
         }}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.navigate("Feed");
+          },
+        })}
       />
       <Tab.Screen
         name="Cart"
@@ -68,6 +74,11 @@ const AppNavigator = (props) => {
             </View>
           ),
         }}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.navigate("Cart");
+          },
+        })}
       />
 
       <Tab.Screen
@@ -78,6 +89,11 @@ const AppNavigator = (props) => {
             <MaterialCommunityIcons name="account" color={color} size={30} />
           ),
         }}
+        listeners={({ navigation }) => ({
+          tabPress: () => {
+            navigation.navigate("Account");
+          },
+        })}
       />
     </Tab.Navigator>
   );
