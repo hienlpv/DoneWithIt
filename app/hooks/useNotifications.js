@@ -1,9 +1,10 @@
 import { useContext, useEffect } from "react";
-import * as Notifications from "expo-notifications";
+import { Platform } from "react-native";
 import Constants from "expo-constants";
+
 import { pushToken } from "../api/auth";
 import AuthContext from "../auth/context";
-import { Platform } from "react-native";
+import * as Notifications from "expo-notifications";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

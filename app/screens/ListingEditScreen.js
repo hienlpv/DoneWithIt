@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { KeyboardAvoidingView, ScrollView, StyleSheet } from "react-native";
 import * as Yup from "yup";
-import { connect } from "react-redux";
 
+import useApi from "../hooks/useApi";
+import Screen from "../components/Screen";
+import UploadScreen from "./UploadScreen";
+import CategoryPickerItem from "../components/CategoryPickerItem";
+import { getCategories } from "../api/category";
 import {
   Form,
   FormField,
@@ -10,11 +15,6 @@ import {
   FormPicker,
   SubmitButton,
 } from "../components/forms";
-import Screen from "../components/Screen";
-import UploadScreen from "./UploadScreen";
-import CategoryPickerItem from "../components/CategoryPickerItem";
-import useApi from "../hooks/useApi";
-import { getCategories } from "../api/category";
 import * as productActions from "../redux/actions/product";
 
 const validationSchema = Yup.object().shape({

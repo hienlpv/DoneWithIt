@@ -1,19 +1,19 @@
 import React, { useContext } from "react";
-import { FlatList, View, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
+import { FlatList, View, StyleSheet, TouchableOpacity } from "react-native";
 
 import Screen from "../components/Screen";
+import Icon from "../components/Icon";
+import Text from "../components/Text";
+import colors from "../config/colors";
+import AuthContext from "../auth/context";
+import { formatVND } from "../utility/formatCurrency";
 import {
   ListItem,
   ListItemDeleteAction,
   ListItemSeparator,
 } from "../components/lists";
-import Icon from "../components/Icon";
 import * as cartAction from "../redux/actions/cartItem";
-import Text from "../components/Text";
-import AuthContext from "../auth/context";
-import colors from "../config/colors";
-import { formatVND } from "../utility/formatCurrency";
 
 function CartScreen(props) {
   const { cartItems, navigation } = props;

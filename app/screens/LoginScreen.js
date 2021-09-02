@@ -1,4 +1,6 @@
 import React, { useState, useContext } from "react";
+import jwtDecode from "jwt-decode";
+import { ActivityIndicator } from "react-native";
 import {
   StyleSheet,
   Image,
@@ -6,21 +8,19 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import * as Yup from "yup";
-import jwtDecode from "jwt-decode";
-import { ActivityIndicator } from "react-native";
 
 import Screen from "../components/Screen";
+import AuthContext from "../auth/context";
+import authStorage from "../auth/storage";
+import colors from "../config/colors";
+import AppButton from "../components/Button";
+import { login } from "../api/auth";
 import {
   Form,
   FormField,
   SubmitButton,
   ErrorMessage,
 } from "../components/forms";
-import { login } from "../api/auth";
-import AuthContext from "../auth/context";
-import authStorage from "../auth/storage";
-import colors from "../config/colors";
-import AppButton from "../components/Button";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().label("Email"),

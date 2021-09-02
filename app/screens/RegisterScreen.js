@@ -8,15 +8,15 @@ import {
 import * as Yup from "yup";
 
 import Screen from "../components/Screen";
+import Button from "../components/Button";
+import colors from "../config/colors";
+import { register } from "../api/auth";
 import {
   ErrorMessage,
   Form,
   FormField,
   SubmitButton,
 } from "../components/forms";
-import { register } from "../api/auth";
-import AppButton from "../components/Button";
-import colors from "../config/colors";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -87,7 +87,7 @@ function RegisterScreen({ navigation }) {
               placeholder="Phone"
             />
             {loading ? (
-              <AppButton title="Register..." />
+              <Button title="Register..." />
             ) : (
               <SubmitButton title="Register" />
             )}

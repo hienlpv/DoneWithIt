@@ -2,16 +2,16 @@ import React from "react";
 import moment from "moment";
 import { View, StyleSheet, FlatList, Alert } from "react-native";
 
-import {
-  ListItem,
-  ListItemDeleteAction,
-  ListItemSeparator,
-} from "../components/lists";
 import Icon from "../components/Icon";
 import Text from "../components/Text";
 import colors from "../config/colors";
 import { formatVND } from "../utility/formatCurrency";
 import { deleteOrder } from "../api/order";
+import {
+  ListItem,
+  ListItemDeleteAction,
+  ListItemSeparator,
+} from "../components/lists";
 
 function UserDetailsScreen({ navigation, route }) {
   const { user, getUsers } = route.params;

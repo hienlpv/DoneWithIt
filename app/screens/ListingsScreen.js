@@ -8,16 +8,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import { getCategories } from "../api/category";
-import { formatVND } from "../utility/formatCurrency";
-import { ListItem, ListItemSeparator } from "../components/lists";
-import * as productAction from "../redux/actions/product";
+import Icon from "../components/Icon";
 import Screen from "../components/Screen";
 import Card from "../components/Card";
 import Text from "../components/Text";
 import colors from "../config/colors";
-import AppTextInput from "../components/TextInput";
-import Icon from "../components/Icon";
+import TextInput from "../components/TextInput";
+import { getCategories } from "../api/category";
+import { formatVND } from "../utility/formatCurrency";
+import { ListItem, ListItemSeparator } from "../components/lists";
+import * as productAction from "../redux/actions/product";
 
 function ListingsScreen(props) {
   const { navigation, products, fetchProducts } = props;
@@ -67,7 +67,7 @@ function ListingsScreen(props) {
     return (
       <Screen style={styles.screen}>
         <View style={styles.searchContainer}>
-          <AppTextInput
+          <TextInput
             icon="card-search"
             onChangeText={(text) => search(text)}
             onFocus={() => setSearchActive(true)}
@@ -102,7 +102,7 @@ function ListingsScreen(props) {
   return (
     <Screen style={styles.screen}>
       <View style={styles.searchContainer}>
-        <AppTextInput
+        <TextInput
           icon="card-search"
           onChangeText={(text) => search(text)}
           onFocus={() => setSearchActive(true)}

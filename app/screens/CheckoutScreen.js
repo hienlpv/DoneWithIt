@@ -1,4 +1,6 @@
 import React, { useState, useContext } from "react";
+import Toast from "react-native-toast-message";
+import { connect } from "react-redux";
 import {
   StyleSheet,
   KeyboardAvoidingView,
@@ -6,22 +8,19 @@ import {
   View,
 } from "react-native";
 import * as Yup from "yup";
-import Toast from "react-native-toast-message";
-import { connect } from "react-redux";
 
 import Screen from "../components/Screen";
+import Icon from "../components/Icon";
+import UploadScreen from "./UploadScreen";
+import AuthContext from "../auth/context";
+import { ListItem } from "../components/lists";
+import { addOrder } from "../api/order";
 import {
   ErrorMessage,
   Form,
   FormField,
   SubmitButton,
 } from "../components/forms";
-import { ListItem } from "../components/lists";
-import UploadScreen from "./UploadScreen";
-import Icon from "../components/Icon";
-
-import AuthContext from "../auth/context";
-import { addOrder } from "../api/order";
 import * as cartActions from "../redux/actions/cartItem";
 import * as productActions from "../redux/actions/product";
 

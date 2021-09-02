@@ -4,6 +4,8 @@ const endpoint = "/products";
 
 export const getProducts = () => client.get(endpoint);
 
+export const deleteProduct = (id) => client.delete(`${endpoint}/${id}`);
+
 export const addProduct = (data, onUploadProgress) =>
   client.post(endpoint, data, {
     onUploadProgress: (progress) =>
@@ -15,5 +17,3 @@ export const updateProduct = (id, data, onUploadProgress) =>
     onUploadProgress: (progress) =>
       onUploadProgress(progress.loaded / progress.total),
   });
-
-export const deleteProduct = (id) => client.delete(`${endpoint}/${id}`);

@@ -1,5 +1,5 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+
 import AccountScreen from "../screens/AccountScreen";
 import ListingEditScreen from "../screens/ListingEditScreen";
 import OrderListScreen from "../screens/OrderListScreen";
@@ -9,10 +9,14 @@ import CategoriesScreen from "../screens/CategoriesScreen";
 import UserListScreen from "../screens/UserListScreen";
 import UserEditScreen from "../screens/UserEditScreen";
 import UserDetailsScreen from "../screens/UserDetailsScreen";
+import useNotifications from "../hooks/useNotifications";
+import { navigate } from "./rootNavigation";
+import { createStackNavigator } from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
 
 const AccountNavigator = () => {
+  useNotifications(() => navigate("Account"));
   return (
     <Stack.Navigator>
       <Stack.Screen

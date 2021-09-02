@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, FlatList, View, TouchableOpacity } from "react-native";
 import randomColor from "random-color";
+import { StyleSheet, FlatList, View, TouchableOpacity } from "react-native";
 
 import Icon from "../components/Icon";
+import Text from "../components/Text";
+import Screen from "../components/Screen";
+import colors from "../config/colors";
+import TextInput from "../components/TextInput";
+import { getCategories, addCategory, deleteCategory } from "../api/category";
 import {
   ListItem,
   ListItemSeparator,
   ListItemDeleteAction,
 } from "../components/lists";
-import Screen from "../components/Screen";
-import Text from "../components/Text";
-import { getCategories, addCategory, deleteCategory } from "../api/category";
-import TextInput from "../components/TextInput";
-import colors from "../config/colors";
 
 function CategoriesScreen(props) {
   const [categories, setCategories] = useState([]);

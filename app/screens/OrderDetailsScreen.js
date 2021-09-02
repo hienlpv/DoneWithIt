@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
+import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 
-import { getUserOrder, updateStatus } from "../api/order";
-import { ListItem, ListItemSeparator } from "../components/lists";
 import Screen from "../components/Screen";
 import AppText from "../components/Text";
 import Picker from "../components/Picker";
 import colors from "../config/colors";
 import { formatVND } from "../utility/formatCurrency";
+import { getUserOrder, updateStatus } from "../api/order";
+import { ListItem, ListItemSeparator } from "../components/lists";
 
 function OrderDetailsScreen({ route }) {
   const order = route.params.item;

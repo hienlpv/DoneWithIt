@@ -1,6 +1,7 @@
 import React from "react";
 import { ImageBackground, StyleSheet, View, Image, Text } from "react-native";
-import AppButton from "../components/Button";
+
+import Button from "../components/Button";
 
 function WelcomeScreen({ navigation }) {
   return (
@@ -14,8 +15,8 @@ function WelcomeScreen({ navigation }) {
         <Text style={styles.tagline}>Welcome to Wine World</Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <AppButton title="Login" onPress={() => navigation.navigate("Login")} />
-        <AppButton
+        <Button title="Login" onPress={() => navigation.navigate("Login")} />
+        <Button
           title="Register"
           color="secondary"
           onPress={() => navigation.navigate("Register")}

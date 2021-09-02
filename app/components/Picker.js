@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   View,
   StyleSheet,
@@ -7,9 +8,8 @@ import {
   Button,
   FlatList,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import AppText from "./Text";
+import Text from "./Text";
 import Screen from "./Screen";
 import defaultStyles from "../config/styles";
 import PickerItem from "./PickerItem";
@@ -40,9 +40,9 @@ function AppPicker({
             />
           )}
           {selectedItem ? (
-            <AppText style={styles.text}>{selectedItem.name}</AppText>
+            <Text style={styles.text}>{selectedItem.name}</Text>
           ) : (
-            <AppText style={styles.placeholder}>{placeholder}</AppText>
+            <Text style={styles.placeholder}>{placeholder}</Text>
           )}
 
           <MaterialCommunityIcons

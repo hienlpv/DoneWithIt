@@ -8,17 +8,17 @@ import {
 import * as Yup from "yup";
 
 import Screen from "../components/Screen";
+import Button from "../components/Button";
+import colors from "../config/colors";
+import Toast from "react-native-toast-message";
+import AuthContext from "../auth/context";
+import { updateUser } from "../api/auth";
 import {
   ErrorMessage,
   Form,
   FormField,
   SubmitButton,
 } from "../components/forms";
-import { updateUser } from "../api/auth";
-import AppButton from "../components/Button";
-import colors from "../config/colors";
-import AuthContext from "../auth/context";
-import Toast from "react-native-toast-message";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -121,7 +121,7 @@ function UserEditScreen() {
               placeholder="Quốc gia"
             />
             {loading ? (
-              <AppButton title="Cập nhật..." />
+              <Button title="Cập nhật..." />
             ) : (
               <SubmitButton title="Cập nhật" />
             )}

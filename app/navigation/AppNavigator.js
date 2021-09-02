@@ -1,18 +1,16 @@
 import React, { useContext } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { View } from "react-native";
 import { connect } from "react-redux";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import FeedNavigator from "./FeedNavigator";
-import AccountNavigator from "./AccountNavigator";
-import CartNavigator from "./CartNavigator";
-import colors from "../config/colors";
 import Text from "../components/Text";
+import colors from "../config/colors";
 import AuthContext from "../auth/context";
+import FeedNavigator from "./FeedNavigator";
+import CartNavigator from "./CartNavigator";
 import AuthNavigator from "./AuthNavigator";
-import useNotifications from "../hooks/useNotifications";
-import { navigate } from "./rootNavigation";
+import AccountNavigator from "./AccountNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +37,6 @@ const CartIcon = ({ length }) => {
 
 const AppNavigator = (props) => {
   const { user } = useContext(AuthContext);
-  if (user) useNotifications(() => navigate("Account"));
 
   return (
     <Tab.Navigator

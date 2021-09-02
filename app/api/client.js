@@ -1,7 +1,6 @@
 import { create } from "apisauce";
-import authStorage from "../auth/storage";
 
-// let baseURL = "http://localhost:3000/api/v1";
+import authStorage from "../auth/storage";
 
 const apiClient = create({
   baseURL: "https://easy-shop-server-api.herokuapp.com/api/v1",

@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormikContext } from "formik";
 
-import AppTextInput from "../TextInput";
+import TextInput from "../TextInput";
 import ErrorMessage from "./ErrorMessage";
 import { formatVND } from "../../utility/formatCurrency";
 
@@ -28,7 +28,7 @@ function AppFormField({ name, width, ...otherProps }) {
 
   return (
     <>
-      <AppTextInput
+      <TextInput
         onBlur={() => changeText(name)}
         onChangeText={(text) => setFieldValue(name, text)}
         width={width}

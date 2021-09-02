@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Swiper from "react-native-swiper";
+import { connect } from "react-redux";
 import {
   View,
   Image,
@@ -7,15 +9,12 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { connect } from "react-redux";
-import Swiper from "react-native-swiper";
 
 import colors from "../config/colors";
 import Screen from "../components/Screen";
 import Icon from "../components/Icon";
-
-import * as cartAction from "../redux/actions/cartItem";
 import { formatVND } from "../utility/formatCurrency";
+import * as cartAction from "../redux/actions/cartItem";
 
 function ListingDetailsScreen({ route, addToCart, products }) {
   const id = route.params;

@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
-import AppText from "./Text";
+import Text from "./Text";
 import colors from "../config/colors";
 
 function Card({ title, subTitle, imageURL, onPress, color }) {
@@ -19,16 +19,16 @@ function Card({ title, subTitle, imageURL, onPress, color }) {
           resizeMode="contain"
         />
         <View style={styles.detailsContainer}>
-          <AppText style={styles.title}>{title}</AppText>
+          <Text style={styles.title}>{title}</Text>
           <View style={styles.priceContainer}>
-            <AppText
+            <Text
               style={[
                 styles.subTitle,
                 { color: color ? color : colors.secondary },
               ]}
             >
               {subTitle}
-            </AppText>
+            </Text>
           </View>
         </View>
       </View>

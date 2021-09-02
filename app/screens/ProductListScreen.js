@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { View, StyleSheet, FlatList, Alert } from "react-native";
 
+import colors from "../config/colors";
+import Text from "../components/Text";
+import { formatVND } from "../utility/formatCurrency";
 import {
   ListItem,
   ListItemDeleteAction,
   ListItemSeparator,
 } from "../components/lists";
-import Text from "../components/Text";
-import { formatVND } from "../utility/formatCurrency";
 import * as productAction from "../redux/actions/product";
-import colors from "../config/colors";
 
 function ProductListScreen(props) {
   const { products, deleteProduct, fetchProducts, navigation } = props;

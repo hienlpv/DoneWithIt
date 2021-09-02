@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
+import Toast from "react-native-toast-message";
 import {
   StyleSheet,
   FlatList,
@@ -10,24 +12,22 @@ import {
   CheckBox,
   TextInput,
 } from "react-native";
-import moment from "moment";
-import Toast from "react-native-toast-message";
 
+import Icon from "../components/Icon";
+import Screen from "../components/Screen";
+import colors from "../config/colors";
+import Text from "../components/Text";
 import {
   getUserOrders,
   fetchOrders,
   updateStatus,
   deleteOrder,
 } from "../api/order";
-import Icon from "../components/Icon";
 import {
   ListItem,
   ListItemDeleteAction,
   ListItemSeparator,
 } from "../components/lists";
-import Screen from "../components/Screen";
-import colors from "../config/colors";
-import Text from "../components/Text";
 
 function OrderListScreen(props) {
   const { navigation, route } = props;

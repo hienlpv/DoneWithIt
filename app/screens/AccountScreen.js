@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
 import colorRandom from "random-color";
+import { StyleSheet, View, FlatList } from "react-native";
 
-import { ListItem, ListItemSeparator } from "../components/lists";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
 import AuthContext from "../auth/context";
 import authStorage from "../auth/storage";
+import { ListItem, ListItemSeparator } from "../components/lists";
 
 const menuAdminItems = [
   {

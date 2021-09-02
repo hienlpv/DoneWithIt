@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, Text } from "react-native";
 import colorRandom from "random-color";
+import { View, StyleSheet, FlatList, Text } from "react-native";
 
-import { fetchUser } from "../api/auth";
-import { fetchOrders } from "../api/order";
-import { ListItem, ListItemSeparator } from "../components/lists";
 import Icon from "../components/Icon";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
+import { fetchUser } from "../api/auth";
+import { fetchOrders } from "../api/order";
+import { ListItem, ListItemSeparator } from "../components/lists";
 
 function UserListScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
