@@ -28,13 +28,12 @@ export const fetchProducts = (setFilteredProducts) => async (dispatch) => {
 export const addProducts = (data, setProgress) => async (dispatch) => {
   const res = await addProduct(data, (progress) => setProgress(progress));
   if (!res.ok) {
-    Alert.alert("ERROR", "Something went wrong! Cannot submit to Server");
-    console.log(res.data);
+    Alert.alert("ERROR", "Tạm thời không thử thực hiện thao tác này!");
     return;
   } else
     Toast.show({
       text1: "Successfully",
-      text2: "Your product has been created",
+      text2: "Sản phẩm đã đã thêm thành công!",
       visibilityTime: 2000,
       autoHide: true,
       topOffset: 30,
@@ -51,13 +50,12 @@ export const updateProducts = (id, data, setProgress) => async (dispatch) => {
     setProgress(progress)
   );
   if (!res.ok) {
-    Alert.alert("ERROR", "Something went wrong! Cannot submit to Server");
-    console.log(res.data);
+    Alert.alert("ERROR", "Tạm thời không thử thực hiện thao tác này!");
     return;
   } else
     Toast.show({
       text1: "Successfully",
-      text2: "Your product has been update",
+      text2: "Sản phẩm đã được cập nhật thành công!",
       visibilityTime: 2000,
       autoHide: true,
       topOffset: 30,
@@ -70,7 +68,8 @@ export const updateProducts = (id, data, setProgress) => async (dispatch) => {
 };
 
 export const deleteProducts = (id) => async (dispatch) => {
-  await deleteProduct(id);
+  let res = await deleteProduct(id);
+  if (!res.ok) return Alert.alert("ERROR", "Không thể xoá sản phẩm này!");
   dispatch({
     type: DELETE_PRODUCT,
     payload: id,

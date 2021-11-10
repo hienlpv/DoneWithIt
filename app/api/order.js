@@ -6,7 +6,7 @@ export const fetchOrders = () => client.get(`${endpoint}`);
 
 export const getUserOrder = (ID) => client.get(`${endpoint}/${ID}`);
 
-export const updateStatus = (ID, data) => client.put(`${endpoint}/${ID}`, data);
+export const updateOrder = (ID, data) => client.put(`${endpoint}/${ID}`, data);
 
 export const deleteOrder = (ID) => client.delete(`${endpoint}/${ID}`);
 

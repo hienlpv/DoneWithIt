@@ -12,11 +12,12 @@ import UserDetailsScreen from "../screens/UserDetailsScreen";
 import useNotifications from "../hooks/useNotifications";
 import { navigate } from "./rootNavigation";
 import { createStackNavigator } from "@react-navigation/stack";
+import StatisticScreen from "../screens/StatisticScreen";
 
 const Stack = createStackNavigator();
 
 const AccountNavigator = () => {
-  useNotifications(() => navigate("Account"));
+  // useNotifications(() => navigate("Account"));
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -85,6 +86,13 @@ const AccountNavigator = () => {
         component={UserDetailsScreen}
         options={{
           title: "Thông tin khách hàng",
+        }}
+      />
+      <Stack.Screen
+        name="Statistic"
+        component={StatisticScreen}
+        options={{
+          title: "Thống kê",
         }}
       />
     </Stack.Navigator>

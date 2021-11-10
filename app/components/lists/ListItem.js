@@ -10,6 +10,7 @@ function ListItem({
   titleColor,
   title,
   subTitle,
+  subComponent,
   image,
   IconComponent,
   onPress,
@@ -36,6 +37,7 @@ function ListItem({
                 {subTitle}
               </Text>
             )}
+            {subComponent}
           </View>
           {renderRightActions ? (
             <MaterialCommunityIcons

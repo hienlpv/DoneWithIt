@@ -2,8 +2,11 @@ import { create } from "apisauce";
 
 import authStorage from "../auth/storage";
 
+const devURL = "http://192.168.0.104:3000/api/v1";
+const prodURL = "https://easy-shop-server-api.herokuapp.com/api/v1";
+
 const apiClient = create({
-  baseURL: "https://easy-shop-server-api.herokuapp.com/api/v1",
+  baseURL: devURL,
 });
 
 apiClient.addAsyncRequestTransform(async (request) => {

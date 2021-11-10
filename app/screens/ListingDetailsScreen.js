@@ -20,11 +20,8 @@ function ListingDetailsScreen({ route, addToCart, products }) {
   const id = route.params;
   const listing = products.filter((i) => i.id === id)[0];
 
-  const [countInStock, setCountInStock] = useState(listing.countInStock);
-
   const handleAddProduct = async (product) => {
     await addToCart(product);
-    setCountInStock(countInStock - 1);
   };
 
   const status =
@@ -34,7 +31,20 @@ function ListingDetailsScreen({ route, addToCart, products }) {
 
   return (
     <Screen style={{ paddingTop: 0 }}>
-      <ScrollView>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => handleAddProduct(listing)}
+      >
+        <Icon
+          style={{ borderRadius: 0, width: "90%", height: 45 }}
+          name="cart-plus"
+          backgroundColor={colors.primary}
+          size={30}
+          text="Thêm vào giỏ hàng"
+        />
+      </TouchableOpacity>
+
+      <ScrollView style={{ marginBottom: 50 }}>
         <Swiper
           style={{ backgroundColor: colors.black }}
           showsPagination={false}
@@ -55,15 +65,6 @@ function ListingDetailsScreen({ route, addToCart, products }) {
           <Text style={styles.name}>{listing.name}</Text>
           <View style={styles.priceContainer}>
             <Text style={styles.price}>{formatVND(listing.price)}</Text>
-            <TouchableOpacity onPress={() => handleAddProduct(listing)}>
-              <Icon
-                style={{ borderRadius: 5, width: 80, height: 40 }}
-                name="cart-plus"
-                backgroundColor={colors.primary}
-                size={30}
-                text="Add"
-              />
-            </TouchableOpacity>
           </View>
         </View>
 
@@ -157,6 +158,20 @@ const styles = StyleSheet.create({
   },
   right: {
     flex: 2,
+  },
+  button: {
+    position: "absolute",
+    bottom: 0,
+    zIndex: 1,
+    width: "100%",
+    padding: 10,
+    backgroundColor: colors.white,
+    alignItems: "center",
+    elevation: 5,
+    shadowColor: "black",
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
   },
 });
 

@@ -19,10 +19,10 @@ import {
 } from "../components/forms";
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required().label("Name"),
-  phone: Yup.string().required().label("Phone"),
+  name: Yup.string().required().label("Họ và Tên"),
+  phone: Yup.string().required().label("Số ĐT"),
   email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
+  password: Yup.string().required().min(4).label("Mật khẩu"),
 });
 
 function RegisterScreen({ navigation }) {
@@ -58,7 +58,7 @@ function RegisterScreen({ navigation }) {
               autoCorrect={false}
               icon="account"
               name="name"
-              placeholder="Name"
+              placeholder="Họ và Tên"
             />
             <FormField
               autoCapitalize="none"
@@ -66,7 +66,7 @@ function RegisterScreen({ navigation }) {
               icon="email"
               keyboardType="email-address"
               name="email"
-              placeholder="Email"
+              placeholder="Email đăng nhập"
               textContentType="emailAddress"
             />
             <FormField
@@ -74,7 +74,7 @@ function RegisterScreen({ navigation }) {
               autoCorrect={false}
               icon="lock"
               name="password"
-              placeholder="Password"
+              placeholder="Mật khẩu"
               secureTextEntry
               textContentType="password"
             />
@@ -84,12 +84,12 @@ function RegisterScreen({ navigation }) {
               keyboardType="numeric"
               icon="phone"
               name="phone"
-              placeholder="Phone"
+              placeholder="Số điện thoại"
             />
             {loading ? (
-              <Button title="Register..." />
+              <Button title="Đăng ký..." />
             ) : (
-              <SubmitButton title="Register" />
+              <SubmitButton title="Đăng ký" />
             )}
           </Form>
           <ActivityIndicator

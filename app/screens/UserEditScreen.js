@@ -21,8 +21,8 @@ import {
 } from "../components/forms";
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required().label("Name"),
-  phone: Yup.string().required().label("Phone"),
+  name: Yup.string().required().label("Tên người dùng"),
+  phone: Yup.string().required().label("Số ĐT"),
   email: Yup.string().required().email().label("Email"),
 });
 
@@ -67,7 +67,6 @@ function UserEditScreen() {
               street: user.street,
               phone: user.phone,
               city: user.city,
-              country: user.country,
               apartment: user.apartment,
             }}
             onSubmit={handleSubmit}
@@ -114,12 +113,7 @@ function UserEditScreen() {
               name="city"
               placeholder="Tỉnh/Thành phố"
             />
-            <FormField
-              autoCorrect={false}
-              icon="earth"
-              name="country"
-              placeholder="Quốc gia"
-            />
+
             {loading ? (
               <Button title="Cập nhật..." />
             ) : (

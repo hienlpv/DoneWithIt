@@ -2,9 +2,11 @@ import React, { useContext } from "react";
 import { connect } from "react-redux";
 import { FlatList, View, StyleSheet, TouchableOpacity } from "react-native";
 
+// components
 import Screen from "../components/Screen";
 import Icon from "../components/Icon";
 import Text from "../components/Text";
+
 import colors from "../config/colors";
 import AuthContext from "../auth/context";
 import { formatVND } from "../utility/formatCurrency";
@@ -16,8 +18,44 @@ import {
 import * as cartAction from "../redux/actions/cartItem";
 
 function CartScreen(props) {
-  const { cartItems, navigation } = props;
+  const { cartItems, navigation, addToCart, decreaseFromCart } = props;
   const { user } = useContext(AuthContext);
+
+  const CountComponent = ({ price, count, item }) => (
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <Text>{formatVND(price)}</Text>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <TouchableOpacity onPress={() => decreaseFromCart(item)}>
+          <Icon
+            size={20}
+            name="arrow-left"
+            backgroundColor={colors.secondary}
+          />
+        </TouchableOpacity>
+        <Text>{count}</Text>
+        <TouchableOpacity onPress={() => addToCart(item)}>
+          <Icon
+            size={20}
+            name="arrow-right"
+            backgroundColor={colors.secondary}
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   if (cartItems.length === 0)
     return (
@@ -45,7 +83,14 @@ function CartScreen(props) {
         renderItem={({ item }) => (
           <ListItem
             title={item.name}
-            subTitle={`${formatVND(item.price)} x ${item.count}`}
+            // subTitle={`${formatVND(item.price)} x ${item.count}`}
+            subComponent={
+              <CountComponent
+                price={item.price}
+                count={item.count}
+                item={item}
+              />
+            }
             image={item.images[0]}
             renderRightActions={() => (
               <ListItemDeleteAction
@@ -73,24 +118,22 @@ function CartScreen(props) {
             onPress={() => navigation.navigate("Checkout")}
           >
             <Icon
-              name="credit-card-check"
-              style={{ borderRadius: 5, width: 120, height: 50 }}
+              style={{ borderRadius: 5, width: 130, height: 50 }}
               backgroundColor={colors.primary}
-              size={30}
-              text="Checkout"
+              size={40}
+              text="Thanh Toán"
             />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
             style={styles.checkoutButton}
-            onPress={() => navigation.navigate("Account")}
+            onPress={() => navigation.navigate("Login")}
           >
             <Icon
-              name="account"
-              style={{ borderRadius: 5, width: 120, height: 50 }}
+              style={{ borderRadius: 5, width: 130, height: 50 }}
               backgroundColor={colors.primary}
               size={40}
-              text="Login"
+              text="Đăng nhập"
             />
           </TouchableOpacity>
         )}
@@ -129,6 +172,8 @@ const mapStateToProps = (state) => ({ cartItems: state.cartItems });
 const mapDispatchToProps = (dispatch) => ({
   clearCart: () => dispatch(cartAction.clearCart()),
   removeFromCart: (item) => dispatch(cartAction.removeFromCart(item)),
+  addToCart: (item) => dispatch(cartAction.addToCart(item)),
+  decreaseFromCart: (item) => dispatch(cartAction.decreaseFromCart(item)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartScreen);

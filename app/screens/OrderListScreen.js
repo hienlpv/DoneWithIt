@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
-import Toast from "react-native-toast-message";
+import { connect } from "react-redux";
 import {
   StyleSheet,
   FlatList,
@@ -17,24 +16,22 @@ import Icon from "../components/Icon";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
 import Text from "../components/Text";
-import {
-  getUserOrders,
-  fetchOrders,
-  updateStatus,
-  deleteOrder,
-} from "../api/order";
+import { deleteOrder } from "../api/order";
 import {
   ListItem,
   ListItemDeleteAction,
   ListItemSeparator,
 } from "../components/lists";
+import { momentVN } from "../utility/momentVN";
+import * as productActions from "../redux/actions/product";
+import * as orderActions from "../redux/actions/order";
 
 function OrderListScreen(props) {
-  const { navigation, route } = props;
-  const { isAdmin, id } = route.params.user;
+  const { navigation, route, fetchProducts, orders, getOrders, updateStatus } =
+    props;
+  const { isAdmin } = route.params.user;
 
-  const [orders, setOrders] = useState([]);
-  const [ordersFiltered, setOrdersFiltered] = useState([]);
+  const [ordersFiltered, setOrdersFiltered] = useState(orders);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
@@ -51,33 +48,54 @@ function OrderListScreen(props) {
     Cancel: "red",
   };
 
-  const filterStatus = ["All", "Pending", "Shipping", "Done", "Cancel"];
+  const filterStatus = [
+    {
+      name: "All",
+      display: "Tất cả",
+    },
+    {
+      name: "Pending",
+      display: "Đã tiếp nhận",
+    },
+    {
+      name: "Shipping",
+      display: "Đang giao hàng",
+    },
+    {
+      name: "Done",
+      display: "Giao hàng thành công",
+    },
+    {
+      name: "Cancel",
+      display: "Huỷ bỏ",
+    },
+  ];
 
-  const getOrders = async () => {
+  const fetchOrders = async () => {
     setLoading(true);
-    const result = isAdmin ? await fetchOrders() : await getUserOrders(id);
+    await getOrders(route.params.user, setOrdersFiltered);
     setLoading(false);
-
-    if (!result.ok) return console.log(result.data);
-    setOrders(result.data);
-    setOrdersFiltered(result.data);
   };
 
   const handleActive = (index) => {
     setActive(index);
     if (index === 0) return setOrdersFiltered(orders);
-    setOrdersFiltered(orders.filter((i) => i.status === filterStatus[index]));
+    setOrdersFiltered(
+      orders.filter((i) => i.status === filterStatus[index].name)
+    );
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (item) => {
+    const { id } = item;
     if (isAdmin)
       Alert.alert("WARNING", "Bạn thật sự muốn xoá đơn hàng này?", [
         { text: "Cancel", style: "cancel" },
         {
           text: "OK",
           onPress: async () => {
-            await deleteOrder(id);
-            await getOrders();
+            const res = await deleteOrder(id);
+            console.log(res);
+            await fetchOrders();
           },
         },
       ]);
@@ -97,26 +115,16 @@ function OrderListScreen(props) {
   const handleCancel = async () => {
     setModalVisible(!modalVisible);
 
-    let res = await updateStatus(idOrderCancel, {
+    await updateStatus(idOrderCancel, {
       status: "Cancel",
       reasonCancel: reasonCancel,
     });
-    if (!res.ok)
-      return Toast.show({
-        type: "error",
-        position: "top",
-        text1: "Fail",
-        text2: "Huỷ đơn hàng thất bại!",
-        visibilityTime: 2000,
-        autoHide: true,
-        topOffset: 30,
-        onPress: () => Toast.hide(),
-      });
-    getOrders();
+
+    fetchProducts();
   };
 
   useEffect(() => {
-    getOrders();
+    fetchOrders();
   }, []);
 
   if (orders.length === 0 && !loading) {
@@ -140,7 +148,7 @@ function OrderListScreen(props) {
                 { color: active === index ? colors.primary : colors.medium },
               ]}
             >
-              {i}
+              {i.display}
             </Text>
           ))}
         </ScrollView>
@@ -151,8 +159,8 @@ function OrderListScreen(props) {
         renderItem={({ item, index }) => (
           <ListItem
             titleColor={colorStatus[item.status]}
-            title={item.status}
-            subTitle={moment(item.dateOrdered).fromNow()}
+            title={filterStatus.find((i) => i.name === item.status).display}
+            subTitle={momentVN(item.dateOrdered)}
             IconComponent={
               <Icon
                 number={(index + 1).toString()}
@@ -163,7 +171,7 @@ function OrderListScreen(props) {
               navigation.navigate("OrderDetails", {
                 item,
                 isAdmin,
-                getOrders,
+                fetchOrders,
               })
             }
             renderRightActions={
@@ -171,22 +179,20 @@ function OrderListScreen(props) {
                 ? item.status === "Cancel" || item.status === "Done"
                   ? () => (
                       <ListItemDeleteAction
-                        onPress={() => handleDelete(item.id)}
+                        onPress={() => handleDelete(item)}
                       />
                     )
                   : null
                 : item.status === "Pending" || item.status === "Shipping"
                 ? () => (
-                    <ListItemDeleteAction
-                      onPress={() => handleDelete(item.id)}
-                    />
+                    <ListItemDeleteAction onPress={() => handleDelete(item)} />
                   )
                 : null
             }
           />
         )}
         refreshing={loading}
-        onRefresh={() => getOrders()}
+        onRefresh={() => getOrders(route.params.user)}
         ItemSeparatorComponent={ListItemSeparator}
       />
       <View style={styles.centeredView}>
@@ -364,4 +370,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderListScreen;
+export default connect(
+  (state) => ({ orders: state.orders }),
+  (dispatch) => ({
+    fetchProducts: async () => dispatch(productActions.fetchProducts()),
+    getOrders: async (user, setOrdersFiltered) =>
+      dispatch(orderActions.getOrders(user, setOrdersFiltered)),
+    updateStatus: async (id, data) =>
+      dispatch(orderActions.updateStatus(id, data)),
+  })
+)(OrderListScreen);

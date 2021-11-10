@@ -1,18 +1,25 @@
 import React, { useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
-import store from "./app/redux/store";
-import AppLoading from "expo-app-loading";
-import Toast from "react-native-toast-message";
+import { NavigationContainer } from "@react-navigation/native";
 import { LogBox } from "react-native";
+import Toast from "react-native-toast-message";
+import AppLoading from "expo-app-loading";
+import jwtDecode from "jwt-decode";
 
+// redux
+import store from "./app/redux/store";
+
+// navigation
+import { navigationRef } from "./app/navigation/rootNavigation";
 import navigationTheme from "./app/navigation/navigationTheme";
 import AppNavigator from "./app/navigation/AppNavigator";
+
+// component
 import OfflineNotice from "./app/components/OfflineNotice";
-import AuthContext from "./app/auth/context";
+
+// auth
 import authStorage from "./app/auth/storage";
-import jwtDecode from "jwt-decode";
-import { navigationRef } from "./app/navigation/rootNavigation";
+import AuthContext from "./app/auth/context";
 
 export default function App() {
   LogBox.ignoreAllLogs();
@@ -38,7 +45,7 @@ export default function App() {
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       <Provider store={store}>
-        <OfflineNotice />
+        {/* <OfflineNotice /> */}
         <NavigationContainer ref={navigationRef} theme={navigationTheme}>
           <AppNavigator />
         </NavigationContainer>

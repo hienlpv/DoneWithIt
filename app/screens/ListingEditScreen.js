@@ -18,16 +18,21 @@ import {
 import * as productActions from "../redux/actions/product";
 
 const validationSchema = Yup.object().shape({
-  title: Yup.string().required().min(1).label("Title"),
-  brand: Yup.string().required().min(1).label("Brand"),
-  price: Yup.string().required().min(1).label("Price"),
-  countInStock: Yup.number().required().min(1).label("Stock"),
-  description: Yup.string().label("Description"),
-  category: Yup.object().required().nullable().label("Category"),
-  images: Yup.array().min(1, "Please select at least one image"),
+  images: Yup.array().min(1, "Hãy chọn ít nhất 1 ảnh!"),
+  title: Yup.string().required().label("Tên sản phẩm"),
+  brand: Yup.string().required().label("Thương hiệu"),
+  price: Yup.string().required().label("Giá"),
+  countInStock: Yup.number().required().label("Số lượng"),
+  category: Yup.object().required().nullable().label("Loại sản phẩm"),
+  description: Yup.string().required().label("Mô tả sản phẩm"),
 });
 
-function ListingEditScreen({ route, addProduct, updateProduct }) {
+function ListingEditScreen({
+  route,
+  addProduct,
+  updateProduct,
+  fetchProducts,
+}) {
   const product = route.params.item;
 
   const [progress, setProgress] = useState(0);
@@ -60,6 +65,7 @@ function ListingEditScreen({ route, addProduct, updateProduct }) {
     product
       ? await updateProduct(product.id, dataPost, setProgress)
       : await addProduct(dataPost, setProgress);
+    fetchProducts();
 
     setUploadVisible(false);
     resetForm();
@@ -154,6 +160,7 @@ const styles = StyleSheet.create({
   },
 });
 export default connect(null, (dispatch) => ({
+  fetchProducts: async () => dispatch(productActions.fetchProducts()),
   addProduct: async (data, setProgress) =>
     dispatch(productActions.addProducts(data, setProgress)),
   updateProduct: async (id, data, setProgress) =>

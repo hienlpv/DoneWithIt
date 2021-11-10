@@ -12,6 +12,7 @@ import {
   ListItemDeleteAction,
   ListItemSeparator,
 } from "../components/lists";
+import { momentVN } from "../utility/momentVN";
 
 function UserDetailsScreen({ navigation, route }) {
   const { user, getUsers } = route.params;
@@ -22,6 +23,29 @@ function UserDetailsScreen({ navigation, route }) {
     Done: "green",
     Cancel: "red",
   };
+
+  const filterStatus = [
+    {
+      name: "All",
+      display: "Tất cả",
+    },
+    {
+      name: "Pending",
+      display: "Đã tiếp nhận",
+    },
+    {
+      name: "Shipping",
+      display: "Đang giao hàng",
+    },
+    {
+      name: "Done",
+      display: "Giao hàng thành công",
+    },
+    {
+      name: "Cancel",
+      display: "Huỷ bỏ",
+    },
+  ];
 
   const handleDelete = (id) => {
     Alert.alert("WARNING", "Bạn thật sự muốn xoá đơn hàng này?", [
@@ -87,8 +111,8 @@ function UserDetailsScreen({ navigation, route }) {
         renderItem={({ item, index }) => (
           <ListItem
             titleColor={colorStatus[item.status]}
-            title={item.status}
-            subTitle={moment(item.dateOrdered).fromNow()}
+            title={filterStatus.find((i) => i.name === item.status).display}
+            subTitle={momentVN(item.dateOrdered)}
             IconComponent={
               <Icon
                 number={(index + 1).toString()}

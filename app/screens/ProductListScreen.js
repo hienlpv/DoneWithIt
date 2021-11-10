@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { View, StyleSheet, FlatList, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 
 import colors from "../config/colors";
 import Text from "../components/Text";
@@ -11,6 +17,8 @@ import {
   ListItemSeparator,
 } from "../components/lists";
 import * as productAction from "../redux/actions/product";
+import Icon from "../components/Icon";
+import Screen from "../components/Screen";
 
 function ProductListScreen(props) {
   const { products, deleteProduct, fetchProducts, navigation } = props;
@@ -43,6 +51,18 @@ function ProductListScreen(props) {
   if (products.length === 0) {
     return (
       <Screen>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("AddProduct", {})}
+        >
+          <Icon
+            style={{ borderRadius: 0, width: "90%", height: 45 }}
+            name="plus"
+            backgroundColor={colors.primary}
+            size={30}
+            text="Thêm sản phẩm"
+          />
+        </TouchableOpacity>
         <Text style={{ textAlign: "center" }}>Không có sản phẩm nào</Text>
       </Screen>
     );
@@ -50,7 +70,20 @@ function ProductListScreen(props) {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("AddProduct", {})}
+      >
+        <Icon
+          style={{ borderRadius: 0, width: "90%", height: 45 }}
+          name="plus"
+          backgroundColor={colors.primary}
+          size={30}
+          text="Thêm sản phẩm"
+        />
+      </TouchableOpacity>
       <FlatList
+        style={{ marginBottom: 50 }}
         data={products}
         keyExtractor={(product) => product.id.toString()}
         renderItem={({ item }) => (
@@ -78,12 +111,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: colors.light,
   },
+  button: {
+    position: "absolute",
+    bottom: 0,
+    alignItems: "center",
+    padding: 10,
+    zIndex: 1,
+    width: "100%",
+    backgroundColor: colors.white,
+    elevation: 5,
+    shadowColor: "black",
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
+  },
 });
 
 const mapStateToProps = (state) => ({ products: state.products });
 const mapDispatchToProps = (dispatch) => ({
   deleteProduct: (id) => dispatch(productAction.deleteProducts(id)),
-  fetchProducts: async () => dispatch(productAction.deleteProducts()),
+  fetchProducts: async () => dispatch(productAction.fetchProducts()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductListScreen);

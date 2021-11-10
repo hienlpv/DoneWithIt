@@ -6,6 +6,7 @@ import {
   ScrollView,
   View,
   TouchableOpacity,
+  Keyboard,
 } from "react-native";
 
 import Icon from "../components/Icon";
@@ -57,6 +58,7 @@ function ListingsScreen(props) {
     setSearchActive(false);
     setFilteredProducts(products);
     setActive(0);
+    Keyboard.dismiss();
   };
 
   useEffect(() => {
@@ -189,7 +191,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({ products: state.products });
+const mapStateToProps = (state) => ({
+  products: state.products,
+});
 const mapDispatchToProps = (dispatch) => ({
   fetchProducts: async (setFilteredProducts) =>
     dispatch(productAction.fetchProducts(setFilteredProducts)),

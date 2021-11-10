@@ -1,13 +1,22 @@
 import React, { useContext } from "react";
-import colorRandom from "random-color";
 import { StyleSheet, View, FlatList } from "react-native";
+import { connect } from "react-redux";
+import colorRandom from "random-color";
 
+// components
 import Screen from "../components/Screen";
-import colors from "../config/colors";
 import Icon from "../components/Icon";
+import { ListItem, ListItemSeparator } from "../components/lists";
+
+// auth
 import AuthContext from "../auth/context";
 import authStorage from "../auth/storage";
-import { ListItem, ListItemSeparator } from "../components/lists";
+
+// config
+import colors from "../config/colors";
+
+// redux
+import * as cartActions from "../redux/actions/cartItem";
 
 const menuAdminItems = [
   {
@@ -43,12 +52,12 @@ const menuAdminItems = [
     targetScreen: "Users",
   },
   {
-    title: "Thêm sản phẩm",
+    title: "Thống kê",
     icon: {
-      name: "plus",
+      name: "chart-bar",
       backgroundColor: colorRandom().hexString(),
     },
-    targetScreen: "AddProduct",
+    targetScreen: "Statistic",
   },
 ];
 
@@ -63,12 +72,13 @@ const menuUserItems = [
   },
 ];
 
-function AccountScreen({ navigation }) {
+function AccountScreen({ navigation, clearCart }) {
   const { user, setUser } = useContext(AuthContext);
 
   const handleLogout = () => {
     setUser(null);
     authStorage.removeToken();
+    clearCart();
   };
 
   return (
@@ -128,4 +138,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AccountScreen;
+export default connect(null, (dispatch) => ({
+  clearCart: () => dispatch(cartActions.clearCart()),
+}))(AccountScreen);

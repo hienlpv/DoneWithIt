@@ -7,13 +7,13 @@ import AppText from "../components/Text";
 import Picker from "../components/Picker";
 import colors from "../config/colors";
 import { formatVND } from "../utility/formatCurrency";
-import { getUserOrder, updateStatus } from "../api/order";
+import { getUserOrder, updateOrder } from "../api/order";
 import { ListItem, ListItemSeparator } from "../components/lists";
 
 function OrderDetailsScreen({ route }) {
   const order = route.params.item;
   const isAdmin = route.params.isAdmin;
-  const getOrders = route.params.getOrders;
+  const fetchOrders = route.params.fetchOrders;
 
   const [status, setStatus] = useState(order.status);
   const [orderItems, setOrderItems] = useState([]);
@@ -24,21 +24,25 @@ function OrderDetailsScreen({ route }) {
     {
       id: 1,
       label: "Pending",
+      display: "Đã tiếp nhận",
       color: colors.secondary,
     },
     {
       id: 2,
       label: "Shipping",
+      display: "Đang giao hàng",
       color: "orange",
     },
     {
       id: 3,
       label: "Done",
+      display: "Giao hàng thành công",
       color: "green",
     },
     {
       id: 4,
       label: "Cancel",
+      display: "Huỷ bỏ",
       color: "red",
     },
   ];
@@ -71,7 +75,7 @@ function OrderDetailsScreen({ route }) {
     setStatus(label);
 
     setUpdating(true);
-    const res = await updateStatus(order.id, { status: label });
+    const res = await updateOrder(order.id, { status: label });
     setUpdating(false);
 
     if (!res.ok) {
@@ -99,7 +103,7 @@ function OrderDetailsScreen({ route }) {
       topOffset: 30,
       onPress: () => Toast.hide(),
     });
-    getOrders();
+    fetchOrders();
   };
 
   return (
@@ -107,17 +111,18 @@ function OrderDetailsScreen({ route }) {
       <View style={{ marginBottom: 20, backgroundColor: colors.white }}>
         {isAdmin && (
           <View style={styles.container}>
-            <AppText style={styles.header}>Owner</AppText>
+            <AppText style={styles.header}>Chủ đơn</AppText>
             <AppText style={styles.content}>{order.user.name}</AppText>
           </View>
         )}
 
         <View style={styles.container}>
-          <AppText style={styles.header}>Status</AppText>
+          <AppText style={styles.header}>Trạng thái</AppText>
           {isAdmin && order.status !== "Cancel" ? (
             <View style={styles.content}>
               <Picker
-                width="60%"
+                width="70%"
+                title="Cập nhật trạng thái đơn hàng"
                 placeholder={status}
                 items={Status}
                 style={{ padding: 0, marginVertical: 0 }}
@@ -129,36 +134,36 @@ function OrderDetailsScreen({ route }) {
             <AppText
               style={[styles.content, { color: colorStatus(order.status) }]}
             >
-              {order.status}
+              {Status.find((i) => i.label === order.status).display}
             </AppText>
           )}
         </View>
         {order.status === "Cancel" && (
           <View style={styles.container}>
-            <AppText style={styles.header}>Reason</AppText>
+            <AppText style={styles.header}>Lý do huỷ đơn</AppText>
             <AppText style={[styles.content, { fontSize: 16 }]}>
               {order.reasonCancel}
             </AppText>
           </View>
         )}
         <View style={styles.container}>
-          <AppText style={styles.header}>Address</AppText>
+          <AppText style={styles.header}>Địa chỉ</AppText>
           <AppText style={[styles.content, { fontSize: 16 }]}>
             {order.shippingAddress1}
           </AppText>
         </View>
         <View style={styles.container}>
-          <AppText style={styles.header}>Phone</AppText>
+          <AppText style={styles.header}>Số ĐT</AppText>
           <AppText style={styles.content}>{order.phone}</AppText>
         </View>
         <View style={styles.container}>
-          <AppText style={styles.header}>Total</AppText>
+          <AppText style={styles.header}>Tổng</AppText>
           <AppText style={[styles.content, { color: colors.primary }]}>
             {formatVND(order.totalPrice)}
           </AppText>
         </View>
         <View style={styles.container}>
-          <AppText style={styles.header}>Date Created</AppText>
+          <AppText style={styles.header}>Ngày tạo</AppText>
           <AppText style={styles.content}>
             {order.dateOrdered.slice(0, 10)}
           </AppText>

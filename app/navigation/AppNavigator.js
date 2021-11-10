@@ -4,36 +4,14 @@ import { connect } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import Text from "../components/Text";
-import colors from "../config/colors";
 import AuthContext from "../auth/context";
 import FeedNavigator from "./FeedNavigator";
 import CartNavigator from "./CartNavigator";
 import AuthNavigator from "./AuthNavigator";
 import AccountNavigator from "./AccountNavigator";
+import CartIcon from "../components/CartIcon";
 
 const Tab = createBottomTabNavigator();
-
-const CartIcon = ({ length }) => {
-  if (length === 0) return null;
-  return (
-    <View
-      style={{
-        backgroundColor: colors.primary,
-        width: 20,
-        height: 20,
-        borderRadius: 10,
-        justifyContent: "center",
-        alignItems: "center",
-        position: "absolute",
-        right: -5,
-        top: -5,
-      }}
-    >
-      <Text style={{ fontSize: 10, color: colors.white }}>{length}</Text>
-    </View>
-  );
-};
 
 const AppNavigator = (props) => {
   const { user } = useContext(AuthContext);
@@ -49,27 +27,43 @@ const AppNavigator = (props) => {
       <Tab.Screen
         name="Feed"
         component={FeedNavigator}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home" color={color} size={30} />
-          ),
+        options={({ navigation }) => {
+          const route =
+            navigation.getState().routes[navigation.getState().index];
+          const routeName = route.state
+            ? route.state.routeNames[route.state.index]
+            : "";
+          return {
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="home" color={color} size={30} />
+            ),
+            tabBarVisible: routeName !== "ListingDetails",
+          };
         }}
         listeners={({ navigation }) => ({
           tabPress: () => {
-            navigation.navigate("Feed");
+            // navigation.navigate("Feed");
           },
         })}
       />
       <Tab.Screen
         name="Cart"
         component={CartNavigator}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <View>
-              <MaterialCommunityIcons name="cart" color={color} size={30} />
-              <CartIcon length={props.cartItems.length} />
-            </View>
-          ),
+        options={({ navigation }) => {
+          const route =
+            navigation.getState().routes[navigation.getState().index];
+          const routeName = route.state
+            ? route.state.routeNames[route.state.index]
+            : "Cart";
+          return {
+            tabBarIcon: ({ color }) => (
+              <View>
+                <MaterialCommunityIcons name="cart" color={color} size={30} />
+                <CartIcon length={props.cartItems.length} top={-5} right={-5} />
+              </View>
+            ),
+            tabBarVisible: routeName === "Cart",
+          };
         }}
         listeners={({ navigation }) => ({
           tabPress: () => {
@@ -81,10 +75,18 @@ const AppNavigator = (props) => {
       <Tab.Screen
         name="Account"
         component={user ? AccountNavigator : AuthNavigator}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="account" color={color} size={30} />
-          ),
+        options={({ navigation }) => {
+          const route =
+            navigation.getState().routes[navigation.getState().index];
+          const routeName = route.state
+            ? route.state.routeNames[route.state.index]
+            : "Account";
+          return {
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="account" color={color} size={30} />
+            ),
+            tabBarVisible: routeName === "Account",
+          };
         }}
         listeners={({ navigation }) => ({
           tabPress: () => {

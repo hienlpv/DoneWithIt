@@ -48,6 +48,25 @@ function CategoriesScreen(props) {
     return (
       <Screen>
         <Text style={{ textAlign: "center" }}>Không có loại sản phẩm nào</Text>
+        <View style={styles.addContainer}>
+          <TextInput
+            style={{ backgroundColor: colors.light }}
+            width="60%"
+            icon="bottle-wine"
+            placeholder="Loại mới"
+            value={category}
+            onChangeText={(text) => setCategory(text)}
+          />
+          <TouchableOpacity onPress={handleAdd}>
+            <Icon
+              name="plus"
+              style={{ borderRadius: 5, width: 100, height: 50 }}
+              backgroundColor={colors.primary}
+              size={30}
+              text="Thêm"
+            />
+          </TouchableOpacity>
+        </View>
       </Screen>
     );
   }
@@ -55,6 +74,7 @@ function CategoriesScreen(props) {
   return (
     <Screen style={styles.screen}>
       <FlatList
+        style={{ marginBottom: 70 }}
         data={categories}
         keyExtractor={(category) => category.id.toString()}
         renderItem={({ item }) => (
@@ -82,16 +102,17 @@ function CategoriesScreen(props) {
           style={{ backgroundColor: colors.light }}
           width="60%"
           icon="bottle-wine"
-          placeholder="New Category"
+          placeholder="Loại mới"
           value={category}
           onChangeText={(text) => setCategory(text)}
         />
         <TouchableOpacity onPress={handleAdd}>
           <Icon
-            style={{ borderRadius: 5, width: 80, height: 40 }}
+            name="plus"
+            style={{ borderRadius: 5, width: 100, height: 50 }}
             backgroundColor={colors.primary}
             size={30}
-            text="ADD"
+            text="Thêm"
           />
         </TouchableOpacity>
       </View>
@@ -104,11 +125,15 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   addContainer: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     backgroundColor: colors.white,
     paddingHorizontal: 10,
+    zIndex: 1,
   },
 });
 

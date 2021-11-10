@@ -15,11 +15,19 @@ function WelcomeScreen({ navigation }) {
         <Text style={styles.tagline}>Welcome to Wine World</Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <Button title="Login" onPress={() => navigation.navigate("Login")} />
         <Button
-          title="Register"
+          title="Trang Chủ"
+          color="danger"
+          onPress={() => navigation.navigate("Feed")}
+        />
+        <Button
+          title="Đăng ký"
           color="secondary"
           onPress={() => navigation.navigate("Register")}
+        />
+        <Button
+          title="Đăng Nhập"
+          onPress={() => navigation.navigate("Login")}
         />
       </View>
     </ImageBackground>

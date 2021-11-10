@@ -23,8 +23,8 @@ import {
 } from "../components/forms";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
+  email: Yup.string().email().required().label("Email"),
+  password: Yup.string().required().min(4).label("Mật khẩu"),
 });
 
 function LoginScreen(props) {
@@ -57,7 +57,7 @@ function LoginScreen(props) {
 
           <ErrorMessage
             style={styles.error}
-            error="Invalid email or password"
+            error="Email hoặc Mật khẩu không đúng!"
             visible={loginFailed}
           />
           <Form
@@ -71,7 +71,7 @@ function LoginScreen(props) {
               icon="email"
               keyboardType="email-address"
               name="email"
-              placeholder="Email"
+              placeholder="Email đăng nhập"
               textContentType="emailAddress"
             />
             <FormField
@@ -79,14 +79,14 @@ function LoginScreen(props) {
               autoCorrect={false}
               icon="lock"
               name="password"
-              placeholder="Password"
+              placeholder="Mật khẩu"
               secureTextEntry
               textContentType="password"
             />
             {loading ? (
-              <AppButton title="Login..." />
+              <AppButton title="Đăng nhập..." />
             ) : (
-              <SubmitButton title="Login" />
+              <SubmitButton title="Đăng nhập" />
             )}
           </Form>
           <ActivityIndicator
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   },
   error: {
     textAlign: "center",
+    marginLeft: 0,
   },
 });
 
