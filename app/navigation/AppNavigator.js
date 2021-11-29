@@ -42,7 +42,7 @@ const AppNavigator = (props) => {
         }}
         listeners={({ navigation }) => ({
           tabPress: () => {
-            // navigation.navigate("Feed");
+            navigation.navigate("Feed");
           },
         })}
       />
