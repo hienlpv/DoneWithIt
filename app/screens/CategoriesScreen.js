@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from "react";
 import randomColor from "random-color";
-import { StyleSheet, FlatList, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  FlatList,
+  View,
+  TouchableOpacity,
+  Alert,
+  Modal,
+  TouchableWithoutFeedback,
+} from "react-native";
 
 import Icon from "../components/Icon";
 import Text from "../components/Text";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
 import TextInput from "../components/TextInput";
-import { getCategories, addCategory, deleteCategory } from "../api/category";
+import {
+  getCategories,
+  addCategory,
+  deleteCategory,
+  updateCategory,
+} from "../api/category";
 import {
   ListItem,
   ListItemSeparator,
@@ -18,6 +31,8 @@ function CategoriesScreen(props) {
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [choose, setChoose] = useState();
 
   const getCategory = async () => {
     setLoading(true);
@@ -38,6 +53,18 @@ function CategoriesScreen(props) {
     await addCategory(dataPost);
     setCategory("");
     getCategory();
+  };
+
+  const handleDelete = async (id) => {
+    const res = await deleteCategory(id);
+    if (!res.ok)
+      return Alert.alert("ERROR", "Không thể xoá loại sản phẩm này!");
+    getCategory();
+  };
+
+  const handleUpdate = (item) => {
+    setIsUpdate(true);
+    setChoose(item);
   };
 
   useEffect(() => {
@@ -83,11 +110,11 @@ function CategoriesScreen(props) {
             IconComponent={
               <Icon name={item.icon} backgroundColor={item.color} />
             }
+            onPress={() => handleUpdate(item)}
             renderRightActions={() => (
               <ListItemDeleteAction
                 onPress={async () => {
-                  await deleteCategory(item.id);
-                  getCategory();
+                  await handleDelete(item.id);
                 }}
               />
             )}
@@ -116,6 +143,49 @@ function CategoriesScreen(props) {
           />
         </TouchableOpacity>
       </View>
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isUpdate}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <TouchableWithoutFeedback onPress={() => setIsUpdate(false)}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <View style={styles.updateContainer}>
+                  <TextInput
+                    style={{ backgroundColor: colors.light, marginRight: 10 }}
+                    width="60%"
+                    icon="bottle-wine"
+                    placeholder="Loại"
+                    value={choose ? choose.name : ""}
+                    onChangeText={(text) =>
+                      setChoose({ ...choose, name: text })
+                    }
+                  />
+                  <TouchableOpacity
+                    onPress={async () => {
+                      await updateCategory(choose.id, { name: choose.name });
+                      setIsUpdate(false);
+                      getCategory();
+                    }}
+                  >
+                    <Icon
+                      style={{ borderRadius: 5, width: 100, height: 50 }}
+                      backgroundColor={colors.primary}
+                      size={30}
+                      text="Sửa"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </View>
     </Screen>
   );
 }
@@ -134,6 +204,32 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: 10,
     zIndex: 1,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    padding: 20,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  updateContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });
 

@@ -7,3 +7,6 @@ export const getCategories = () => client.get(endpoint);
 export const addCategory = (data) => client.post(endpoint, data);
 
 export const deleteCategory = (id) => client.delete(`${endpoint}/${id}`);
+
+export const updateCategory = (id, data) =>
+  client.put(`${endpoint}/${id}`, data);
