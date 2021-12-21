@@ -16,10 +16,10 @@ function AppFormField({ name, width, ...otherProps }) {
         setFieldValue(name, formatVND(price));
         break;
       case "concentration":
-        setFieldValue(name, `${values[name]}%`);
+        setFieldValue(name, `${values[name].replace("%", "")}%`);
         break;
       case "volume":
-        setFieldValue(name, `${values[name]}ml`);
+        setFieldValue(name, `${values[name].replace("ml", "")}ml`);
         break;
     }
 

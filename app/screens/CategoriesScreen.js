@@ -13,8 +13,8 @@ import {
 import Icon from "../components/Icon";
 import Text from "../components/Text";
 import Screen from "../components/Screen";
-import colors from "../config/colors";
 import TextInput from "../components/TextInput";
+import colors from "../config/colors";
 import {
   getCategories,
   addCategory,
@@ -50,7 +50,10 @@ function CategoriesScreen(props) {
       icon: "bottle-wine",
       color: color.hexString(),
     };
-    await addCategory(dataPost);
+    const res = await addCategory(dataPost);
+
+    if (!res.ok) return;
+
     setCategory("");
     getCategory();
   };
@@ -84,6 +87,7 @@ function CategoriesScreen(props) {
             value={category}
             onChangeText={(text) => setCategory(text)}
           />
+
           <TouchableOpacity onPress={handleAdd}>
             <Icon
               name="plus"

@@ -53,7 +53,7 @@ function ListingEditScreen({
       price: values.price,
       countInStock: values.countInStock,
       description: values.description,
-      category: product ? values.category._id : values.category.id,
+      category: values.category._id ? values.category._id : values.category.id,
       concentration: values.concentration,
       volume: values.volume,
       origin: values.origin,
@@ -65,9 +65,10 @@ function ListingEditScreen({
     product
       ? await updateProduct(product.id, dataPost, setProgress)
       : await addProduct(dataPost, setProgress);
-    fetchProducts();
 
     setUploadVisible(false);
+    fetchProducts();
+
     resetForm();
   };
 
@@ -146,7 +147,7 @@ function ListingEditScreen({
               numberOfLines={3}
               placeholder="Mô tả"
             />
-            <SubmitButton title="Post" />
+            <SubmitButton title={product ? "Cập nhật" : "Thêm"} />
           </Form>
         </ScrollView>
       </KeyboardAvoidingView>

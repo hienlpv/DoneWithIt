@@ -121,7 +121,7 @@ function AccountScreen({ navigation, clearCart }) {
         />
       </View>
       <ListItem
-        title="Log Out"
+        title="Đăng xuất"
         IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
         onPress={handleLogout}
       />

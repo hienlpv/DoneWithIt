@@ -2,7 +2,7 @@ import { create } from "apisauce";
 
 import authStorage from "../auth/storage";
 
-const devURL = "http://192.168.0.107:3000/api/v1";
+const devURL = "http://192.168.0.106:3000/api/v1";
 const prodURL = "https://easy-shop-server-api.herokuapp.com/api/v1";
 
 const apiClient = create({

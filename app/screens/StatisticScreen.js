@@ -386,78 +386,72 @@ const StatisticScreen = (props) => {
 
   if (choose === "product") {
     return (
-      <ScrollView style={styles.screen}>
-        <View style={styles.screen}>
-          <StatisticList />
-          <View style={styles.container}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>Sản phẩm</Text>
-              <TouchableOpacity onPress={() => setActive(!active)}>
-                <Icon name="filter" backgroundColor={colors.primary} />
-              </TouchableOpacity>
-              <Filter />
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.subTitle}>
-                {`Sản phẩm đã bán ${dateFilter
-                  .find((i) => i.id === filterIndex)
-                  .display.toLowerCase()}`}
-              </Text>
-              {loading ? (
-                <View style={styles.contentBox}>
-                  <ActivityIndicator size="large" color={colors.secondary} />
-                </View>
-              ) : (
-                <View style={styles.contentBox}>
-                  <Text style={styles.boxLabel}>
-                    {productSell.length} Sản phẩm
-                  </Text>
-                  <FlatList
-                    nestedScrollEnabled
-                    style={{ maxHeight: 200 }}
-                    data={productSell}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                      <ListItem
-                        title={item.product.name}
-                        subTitle={`đã bán ${item.count}`}
-                        image={item.product.images[0]}
-                      />
-                    )}
-                    ItemSeparatorComponent={ListItemSeparator}
-                  />
-                </View>
-              )}
-
-              <Text style={styles.subTitle}>Sản phẩm sắp hết hàng</Text>
+      <View style={styles.screen}>
+        <StatisticList />
+        <View style={styles.container}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Sản phẩm</Text>
+            <TouchableOpacity onPress={() => setActive(!active)}>
+              <Icon name="filter" backgroundColor={colors.primary} />
+            </TouchableOpacity>
+            <Filter />
+          </View>
+          <View style={styles.content}>
+            <Text style={styles.subTitle}>
+              {`Sản phẩm đã bán ${dateFilter
+                .find((i) => i.id === filterIndex)
+                .display.toLowerCase()}`}
+            </Text>
+            {loading ? (
+              <View style={styles.contentBox}>
+                <ActivityIndicator size="large" color={colors.secondary} />
+              </View>
+            ) : (
               <View style={styles.contentBox}>
                 <Text style={styles.boxLabel}>
-                  {productsFiltered.length} Sản phẩm
+                  {productSell.length} Sản phẩm
                 </Text>
                 <FlatList
                   nestedScrollEnabled
                   style={{ maxHeight: 200 }}
-                  data={productsFiltered}
+                  data={productSell}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
                     <ListItem
-                      title={item.name}
-                      subTitle={`${formatVND(item.price)} x ${
-                        item.countInStock
-                      }`}
-                      image={item.images[0]}
-                      onPress={() =>
-                        navigation.navigate("EditProduct", { item })
-                      }
+                      title={item.product.name}
+                      subTitle={`đã bán ${item.count}`}
+                      image={item.product.images[0]}
                     />
                   )}
                   ItemSeparatorComponent={ListItemSeparator}
                 />
               </View>
+            )}
+
+            <Text style={styles.subTitle}>Sản phẩm sắp hết hàng</Text>
+            <View style={styles.contentBox}>
+              <Text style={styles.boxLabel}>
+                {productsFiltered.length} Sản phẩm
+              </Text>
+              <FlatList
+                nestedScrollEnabled
+                style={{ maxHeight: 200 }}
+                data={productsFiltered}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <ListItem
+                    title={item.name}
+                    subTitle={`${formatVND(item.price)} x ${item.countInStock}`}
+                    image={item.images[0]}
+                    onPress={() => navigation.navigate("EditProduct", { item })}
+                  />
+                )}
+                ItemSeparatorComponent={ListItemSeparator}
+              />
             </View>
           </View>
         </View>
-      </ScrollView>
+      </View>
     );
   }
 };
