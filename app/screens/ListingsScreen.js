@@ -19,6 +19,7 @@ import { getCategories } from "../api/category";
 import { formatVND } from "../utility/formatCurrency";
 import { ListItem, ListItemSeparator } from "../components/lists";
 import * as productAction from "../redux/actions/product";
+import string_to_slug from "../utility/slugify";
 
 function ListingsScreen(props) {
   const { navigation, products, fetchProducts } = props;
@@ -50,7 +51,9 @@ function ListingsScreen(props) {
 
   const search = (text) => {
     setFilteredProducts(
-      products.filter((product) => product.name.includes(text))
+      products.filter((product) =>
+        string_to_slug(product.name).includes(text.toLowerCase())
+      )
     );
   };
 
@@ -108,7 +111,14 @@ function ListingsScreen(props) {
           icon="card-search"
           onChangeText={(text) => search(text)}
           onFocus={() => setSearchActive(true)}
+          autoFocus
         />
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => closeSearch()}
+        >
+          <Icon name="close" size={30} />
+        </TouchableOpacity>
       </View>
       <View style={styles.categoriesContainer}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>

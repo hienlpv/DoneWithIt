@@ -41,7 +41,8 @@ function CartScreen(props) {
         <TouchableOpacity onPress={() => decreaseFromCart(item)}>
           <Icon
             size={20}
-            name="arrow-left"
+            number={"-"}
+            // name="arrow-left"
             backgroundColor={colors.secondary}
           />
         </TouchableOpacity>
@@ -49,7 +50,8 @@ function CartScreen(props) {
         <TouchableOpacity onPress={() => addToCart(item)}>
           <Icon
             size={20}
-            name="arrow-right"
+            number={"+"}
+            // name="arrow-right"
             backgroundColor={colors.secondary}
           />
         </TouchableOpacity>

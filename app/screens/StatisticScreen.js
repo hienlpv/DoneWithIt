@@ -3,13 +3,14 @@ import {
   ActivityIndicator,
   Dimensions,
   FlatList,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
   TouchableOpacity,
   View,
+  Button,
 } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { connect } from "react-redux";
 import colorRandom from "random-color";
 import moment from "moment";
@@ -19,6 +20,7 @@ import colors from "../config/colors";
 
 // components
 import Icon from "../components/Icon";
+// import Button from "../components/Button";
 import { ListItem, ListItemSeparator } from "../components/lists";
 
 // api
@@ -93,6 +95,10 @@ const StatisticScreen = (props) => {
   const [filterIndex, setFilterIndex] = useState(0);
   const [productSell, setProductSell] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [fromDate, setFromDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState();
 
   const ordersFiltered = orders.filter((order) => {
     let dateFormat = dateFilter.find((i) => i.id === filterIndex).name;
@@ -303,6 +309,40 @@ const StatisticScreen = (props) => {
       return total;
     };
 
+    const totalFilteredByDate = (orders) => {
+      let ordersFilteredByDate = orders.filter(
+        (order) =>
+          moment(order.dateOrdered).toDate().getTime() >
+            moment(fromDate).toDate().getTime() &&
+          moment(order.dateOrdered).toDate().getTime() <=
+            moment(toDate).toDate().getTime()
+      );
+      return totalFiltered(ordersFilteredByDate);
+    };
+
+    const onChange = (event, selectedDate) => {
+      let currentDate;
+
+      if (show === "from") {
+        currentDate = selectedDate || fromDate;
+        setFromDate(currentDate);
+      } else {
+        currentDate = selectedDate || toDate;
+        setToDate(currentDate);
+      }
+
+      setShow(Platform.OS === "ios");
+    };
+
+    const showMode = (currentMode, type) => {
+      type === "from" ? setShow("from") : setShow("to");
+      setMode(currentMode);
+    };
+
+    const showDatepicker = (type) => {
+      showMode("date", type);
+    };
+
     return (
       <View style={styles.screen}>
         <StatisticList />
@@ -359,7 +399,59 @@ const StatisticScreen = (props) => {
                 {formatVND(totalFiltered(ordersFiltered))}
               </Text>
             </View>
+            <Text style={[styles.subTitle, { color: colors.secondary }]}>
+              Doanh Thu
+            </Text>
+            <View style={styles.contentBox}>
+              <View style={styles.totalBox}>
+                <View>
+                  <Button
+                    onPress={() => showDatepicker("from")}
+                    title="Từ ngày"
+                  />
+                  <Text style={{ marginTop: 10 }}>
+                    {moment(fromDate).toDate().toDateString()}
+                  </Text>
+                </View>
+
+                <View>
+                  <Button
+                    onPress={() => showDatepicker("to")}
+                    title="Đến ngày"
+                  />
+                  <Text style={{ marginTop: 10 }}>
+                    {moment(toDate).toDate().toDateString()}
+                  </Text>
+                </View>
+              </View>
+              {show === "from" && (
+                <DateTimePicker
+                  testID="dateTimePickerFrom"
+                  value={fromDate}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
+              {show === "to" && (
+                <DateTimePicker
+                  testID="dateTimePickerTo"
+                  value={toDate}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
+            </View>
             <View style={styles.totalBox}>
+              <Text style={styles.totalLabel}>Doanh thu lọc</Text>
+              <Text style={styles.totalPrice}>
+                {formatVND(totalFilteredByDate(orders))}
+              </Text>
+            </View>
+            {/* <View style={styles.totalBox}>
               <Text
                 style={{
                   ...styles.totalLabel,
@@ -377,7 +469,7 @@ const StatisticScreen = (props) => {
               >
                 {formatVND(totalFiltered(orders))}
               </Text>
-            </View>
+            </View> */}
           </View>
         </View>
       </View>

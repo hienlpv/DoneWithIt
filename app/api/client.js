@@ -6,7 +6,7 @@ const devURL = "http://192.168.0.106:3000/api/v1";
 const prodURL = "https://easy-shop-server-api.herokuapp.com/api/v1";
 
 const apiClient = create({
-  baseURL: devURL,
+  baseURL: prodURL,
 });
 
 apiClient.addAsyncRequestTransform(async (request) => {
